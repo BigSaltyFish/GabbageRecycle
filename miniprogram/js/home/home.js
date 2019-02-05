@@ -6,6 +6,14 @@ const screenHeight = window.innerHeight
 const BG_IMG_SRC = 'images/garbages/home_page.png'
 const BG_WIDTH = 512
 const BG_HEIGHT = 512
+
+let startBtn = new Image()
+startBtn.src = 'images/button/start.png'
+let modeBtn = new Image()
+modeBtn.src = 'images/button/mode-normal.png'
+let rankBtn = new Image()
+rankBtn.src = 'images/button/rank.png'
+
 let atlas = new Image()
 atlas.src = 'images/Common.png'
 /**
@@ -60,26 +68,70 @@ export default class BackGround extends Sprite {
     )
 
     // ctx.drawImage(atlas, 0, 0, 119, 108, screenWidth / 2 - 150, screenHeight / 2 - 100, 300, 300)
-    ctx.fillStyle = "#ffffff"
-    ctx.font = "20px Arial"
-    ctx.drawImage(
-      atlas,
-      120, 6, 39, 24,
-      screenWidth / 2 - 60,
-      screenHeight / 2 - 100 + 180,
-      120, 40
-    )
+    // ctx.drawImage(
+    //   atlas,
+    //   120, 6, 39, 24,
+    //   screenWidth / 2 - 60,
+    //   screenHeight / 2 - 100 + 180,
+    //   120, 40
+    // )
 
-    ctx.fillText(
-      '开始游戏',
-      screenWidth / 2 - 40,
-      screenHeight / 2 - 100 + 205
-    )
+    this.imgLoad(ctx,
+      startBtn,
+      0,
+      '开始游戏')
+    this.imgLoad(ctx,
+      modeBtn,
+      1,
+      '难度：普通')
+    this.imgLoad(ctx,
+      rankBtn,
+      2,
+      '查看排名')
+
+    // ctx.fillText(
+    //   '开始游戏',
+    //   screenWidth / 2 - 40,
+    //   screenHeight / 2 - 100 + 205
+    // )
     this.btnArea = {
       startX: screenWidth / 2 - 40,
       startY: screenHeight / 2 - 100 + 180,
       endX: screenWidth / 2 + 50,
       endY: screenHeight / 2 - 100 + 255
     }
+  }
+
+  /**
+   * used to load picture, ensure the correct load time.
+   * @param ctx the rendering context
+   * @param url the url of the picture
+   */
+  imgLoad(ctx, img, num, text) {
+    console.log('imgload begin')
+    this.renderBtn(ctx, img,
+      (screenWidth - 10) / 2 + 5 - img.width / 2,
+      (screenHeight - 10) * (8 + num) / 12 - img.height)
+    console.log('imgload end')
+  }
+
+  /**
+   * draw the button onto the canvas on the specific region.
+   * @param ctx the rendering context
+   * @param img the picture
+   * @param X the x position
+   * @param Y the y position
+   */
+  renderBtn(ctx, img, X, Y) {
+    ctx.drawImage(
+      img,
+      0, 0,
+      img.width, img.height,
+      X,
+      Y,
+      img.width,
+      img.height
+    )
+    console.log('reached')
   }
 }
