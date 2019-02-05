@@ -24,6 +24,10 @@ export default class BackGround extends Sprite {
   constructor(ctx) {
     super(BG_IMG_SRC, BG_WIDTH, BG_HEIGHT)
 
+    this.startBtnArea = {}
+    this.modeBtnArea = {}
+    this.rankBtnArea = {}
+
     this.top = 0
 
     this.render(ctx)
@@ -79,39 +83,50 @@ export default class BackGround extends Sprite {
     this.imgLoad(ctx,
       startBtn,
       0,
-      '开始游戏')
+      '开始游戏', 
+      this.startBtnArea)
     this.imgLoad(ctx,
       modeBtn,
       1,
-      '难度：普通')
+      '难度：普通', 
+      this.modeBtnArea)
     this.imgLoad(ctx,
       rankBtn,
       2,
-      '查看排名')
+      '查看排名', 
+      this.rankBtnArea)
 
     // ctx.fillText(
     //   '开始游戏',
     //   screenWidth / 2 - 40,
     //   screenHeight / 2 - 100 + 205
     // )
-    this.btnArea = {
-      startX: screenWidth / 2 - 40,
-      startY: screenHeight / 2 - 100 + 180,
-      endX: screenWidth / 2 + 50,
-      endY: screenHeight / 2 - 100 + 255
-    }
+    // this.btnArea = {
+    //   startX: screenWidth / 2 - 40,
+    //   startY: screenHeight / 2 - 100 + 180,
+    //   endX: screenWidth / 2 + 50,
+    //   endY: screenHeight / 2 - 100 + 255
+    // }
   }
 
   /**
-   * used to load picture, ensure the correct load time.
+   * used to load picture, locate the picture according to num.
    * @param ctx the rendering context
    * @param url the url of the picture
+   * @param area the button area, used to response the touch
    */
-  imgLoad(ctx, img, num, text) {
+  imgLoad(ctx, img, num, text, area) {
     console.log('imgload begin')
     this.renderBtn(ctx, img,
       (screenWidth - 10) / 2 + 5 - img.width / 2,
-      (screenHeight - 10) * (8 + num) / 12 - img.height)
+      (screenHeight - 10) * (8 + num) / 12 - img.height / 2)
+    if(!area)
+      area = {
+        startX: (screenWidth - 10) / 2 + 5 - img.width / 2,
+        startY: (screenHeight - 10) * (8 + num) / 12 - img.height / 2, 
+        endX: (screenWidth - 10) / 2 + 5 + img.width / 2, 
+        endY: (screenHeight - 10) * (8 + num) / 12 + img.height / 2
+      }
     console.log('imgload end')
   }
 
