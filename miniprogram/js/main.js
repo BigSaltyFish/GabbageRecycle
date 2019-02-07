@@ -364,15 +364,39 @@ this.gameinfo.renderGameLife(ctx,databus.life)
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
 
+    area = this.bg.modeBtnArea
 
-    let area = this.bg.btnArea
+    if (x >= area.startX &&
+      x <= area.endX &&
+      y >= area.startY &&
+      y <= area.endY) {
+      console.log('mode!')
+      return;
+    }
+
+    console.log(this.bg)
+    area = this.bg.rankBtnArea
+
+    if (x >= area.startX &&
+      x <= area.endX &&
+      y >= area.startY &&
+      y <= area.endY) {
+      console.log('rank!')
+      return;
+    }
+
+    let area = this.bg.startBtnArea
 
     if (x >= area.startX &&
       x <= area.endX &&
       y >= area.startY &&
       y <= area.endY) {
       this.restart()
+      return;
     }
+
+    
+
   }
 
 

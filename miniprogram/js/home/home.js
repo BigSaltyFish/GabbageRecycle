@@ -6,6 +6,7 @@ const screenHeight = window.innerHeight
 const BG_IMG_SRC = 'images/garbages/home_page.png'
 const BG_WIDTH = 512
 const BG_HEIGHT = 512
+const nullobj = {}
 
 let startBtn = new Image()
 startBtn.src = 'images/button/start.png'
@@ -13,6 +14,8 @@ let modeBtn = new Image()
 modeBtn.src = 'images/button/mode-normal.png'
 let rankBtn = new Image()
 rankBtn.src = 'images/button/rank.png'
+let difficult = new Image()
+difficult.src = 'images/button/mode-difficult.png'
 
 let atlas = new Image()
 atlas.src = 'images/Common.png'
@@ -116,18 +119,18 @@ export default class BackGround extends Sprite {
    * @param area the button area, used to response the touch
    */
   imgLoad(ctx, img, num, text, area) {
-    console.log('imgload begin')
     this.renderBtn(ctx, img,
       (screenWidth - 10) / 2 + 5 - img.width / 2,
       (screenHeight - 10) * (8 + num) / 12 - img.height / 2)
-    if(!area)
-      area = {
-        startX: (screenWidth - 10) / 2 + 5 - img.width / 2,
-        startY: (screenHeight - 10) * (8 + num) / 12 - img.height / 2, 
-        endX: (screenWidth - 10) / 2 + 5 + img.width / 2, 
-        endY: (screenHeight - 10) * (8 + num) / 12 + img.height / 2
-      }
-    console.log('imgload end')
+      area.startX = (screenWidth - 10) / 2 + 5 - img.width / 2
+      area.startY = (screenHeight - 10) * (8 + num) / 12 - img.height / 2
+      area.endX = (screenWidth - 10) / 2 + 5 + img.width / 2
+      area.endY = (screenHeight - 10) * (8 + num) / 12 + img.height / 2
+
+      // console.log(img)
+      // console.log(img.width)
+      // console.log(img.height)
+      // console.log(area)
   }
 
   /**
@@ -147,6 +150,5 @@ export default class BackGround extends Sprite {
       img.width,
       img.height
     )
-    console.log('reached')
   }
 }
