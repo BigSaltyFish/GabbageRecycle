@@ -1,8 +1,6 @@
 import Animation from '../base/animation'
 import DataBus from '../databus'
 
-// const ENEMY_IMG_SRC = 'images/enemy.png'
-
 const ENEMY_WIDTH = 60
 const ENEMY_HEIGHT = 60
 
@@ -103,6 +101,7 @@ export default class Enemy extends Animation {
   }
 
   // 每一帧更新子弹位置
+  // 这个是垃圾桶的位置吧？
   update() {
     this.y += this[__.speed]
 

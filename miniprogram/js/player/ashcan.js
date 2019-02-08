@@ -136,47 +136,46 @@ export default class Ashcan {
     databus.bullets.push(bullet)
   }
 
-changeColor(number){
-  switch(number){
-    case 0:
-      this.sprite1 = new Sprite(PLAYER_IMG_SRC1, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite2 = new Sprite(PLAYER_IMG_SRC2, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite3 = new Sprite(PLAYER_IMG_SRC3, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite4 = new Sprite(PLAYER_IMG_SRC4, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      break
-    case 1:
-      this.sprite1 = new Sprite(PLAYER_IMG_SRC1, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite2 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite3 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite4 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      break
-    case 2:
-      this.sprite1 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite2 = new Sprite(PLAYER_IMG_SRC2, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite3 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite4 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      break
-    case 3:
-      this.sprite1 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite2 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite3 = new Sprite(PLAYER_IMG_SRC3, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite4 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      break
-    case 4:
-      this.sprite1 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite2 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite3 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      this.sprite4 = new Sprite(PLAYER_IMG_SRC4, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-      break
+  changeColor(number){
+    switch(number){
+      case 0:
+        this.sprite1 = new Sprite(PLAYER_IMG_SRC1, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite2 = new Sprite(PLAYER_IMG_SRC2, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite3 = new Sprite(PLAYER_IMG_SRC3, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite4 = new Sprite(PLAYER_IMG_SRC4, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        break
+      case 1:
+        this.sprite1 = new Sprite(PLAYER_IMG_SRC1, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite2 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite3 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite4 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        break
+      case 2:
+        this.sprite1 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite2 = new Sprite(PLAYER_IMG_SRC2, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite3 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite4 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        break
+      case 3:
+        this.sprite1 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite2 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite3 = new Sprite(PLAYER_IMG_SRC3, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite4 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        break
+      case 4:
+        this.sprite1 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite2 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite3 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        this.sprite4 = new Sprite(PLAYER_IMG_SRC4, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
+        break
+    }
   }
-}
 
   drawToCanvas(ctx) {
     this.sprite1.drawToCanvas(ctx)
     this.sprite2.drawToCanvas(ctx)
     this.sprite3.drawToCanvas(ctx)
     this.sprite4.drawToCanvas(ctx)
-    // console.log('ok')
   }
 
   whichIsTouched(x, y) {
@@ -191,12 +190,4 @@ changeColor(number){
     }
     return 0
   }
-  // isCollideWith(sp) {
-  //   this.sprite1.isCollideWith(sp)
-  //   this.sprite2.isCollideWith(sp)
-  //   this.sprite3.isCollideWith(sp)
-  //   this.sprite4.isCollideWith(sp)
-  // }
-
-
 }

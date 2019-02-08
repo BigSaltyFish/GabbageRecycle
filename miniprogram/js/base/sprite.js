@@ -21,7 +21,6 @@ export default class Sprite {
    * 将精灵图绘制在canvas上
    */
   drawToCanvas(ctx) {
-    // console.log(this.visible)
     if (!this.visible)
       return
 //ctx.strokeStyle='fgba(255,0,0,0.5)'

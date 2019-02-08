@@ -21,8 +21,11 @@ export default class Main {
     this.aniId = 0
     this.personalHighScore = null
 
+    // 0 present the normal and 1 present the difficult
+    this.gameMode = 0
+
+    // create the initial page and response the touch
     this.home()
-    // this.restart()
     this.login()
   }
 
@@ -58,6 +61,9 @@ export default class Main {
       })
   }
 
+  /**
+   * clear the initial page and start the game loop
+   */
   restart() {
     databus.reset()
 
@@ -212,14 +218,13 @@ export default class Main {
   }
 
   // 游戏结束后的触摸事件处理逻辑
-  // 这个是点击enemy的处理逻辑吧？
+  // 这个是点击垃圾桶的处理逻辑吧？
   touchEventHandler(e) {
     e.preventDefault()
 
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
     let classification = this.player.whichIsTouched(x, y)
-    // console.log(classification)
 
     let that = this
 
@@ -243,11 +248,7 @@ export default class Main {
       }
     
     }  
-      
-
       // }
-
-
     //}
 
     if (databus.gameOver) {
@@ -268,16 +269,17 @@ export default class Main {
    * 每一帧重新绘制所有的需要展示的元素
    */
   render() {
+    // clear the old canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-
+    // render the scrolling background
     this.bg.render(ctx)
-
+    // draw the enemies onto the canvas
     databus.enemys.forEach((item) => {
         item.drawToCanvas(ctx)
       })
-
+    // draw the four ashcans onto the canvas
     this.player.drawToCanvas(ctx)
-
+    // play the animations in the queue
     databus.animations.forEach((ani) => {
       if (ani.isPlaying) {
         ani.aniRender(ctx)
@@ -286,7 +288,7 @@ export default class Main {
 
     this.gameinfo.renderGameScore(ctx, databus.score)
 
-this.gameinfo.renderGameLife(ctx,databus.life)
+    this.gameinfo.renderGameLife(ctx,databus.life)
 
     // 游戏结束停止帧循环
     if (databus.gameOver) {
@@ -332,7 +334,7 @@ this.gameinfo.renderGameLife(ctx,databus.life)
     if (databus.updateColor==1){
       this.player.changeColor(0)
       databus.updateColor=0
-      }
+    }
     
     this.enemyGenerate()
 
@@ -350,7 +352,7 @@ this.gameinfo.renderGameLife(ctx,databus.life)
   loop() {
     databus.frame++
 
-      this.update()
+    this.update()
     this.render()
 
     this.aniId = window.requestAnimationFrame(
@@ -358,6 +360,13 @@ this.gameinfo.renderGameLife(ctx,databus.life)
       canvas
     )
   }
+
+  /**
+   * the touch handler for the three buttons on the initial page.
+   * note that the restart function will remove the touch handler, 
+   * so the function should return immediately after the touch response.
+   * @param e the touch event
+   */
   game_start(e) {
     e.preventDefault()
 
@@ -370,7 +379,7 @@ this.gameinfo.renderGameLife(ctx,databus.life)
       x <= area.endX &&
       y >= area.startY &&
       y <= area.endY) {
-      console.log('mode!')
+      this.changeMode()
       return;
     }
 
@@ -395,8 +404,14 @@ this.gameinfo.renderGameLife(ctx,databus.life)
       return;
     }
 
-    
+  }
 
+  /**
+   * change the mode of the game, together the icon of the mode button
+   */
+  changeMode() {
+    this.gameMode = (this.gameMode + 1) % 2
+    this.bg.changeModeIcon()
   }
 
 

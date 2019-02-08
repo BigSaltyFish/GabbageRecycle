@@ -19,7 +19,7 @@ export default class DataBus {
 
   reset() {
     this.updateColor = 0
-    this.life = 3
+    this.life = 5
     this.frame      = 0
     this.score      = 0
     this.bullets    = []
