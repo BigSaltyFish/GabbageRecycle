@@ -76,7 +76,7 @@ export default class Main {
     canvas.addEventListener('touchstart', this.touchHandler)
 
     this.bg = new BackGround(ctx)
-    this.player = new Ashcan(ctx)
+    this.player = new Ashcan(ctx, this.gameMode)
     this.gameinfo = new GameInfo()
     this.music = new Music()
 
@@ -235,7 +235,6 @@ export default class Main {
     if (databus.enemys.length == 0) {
       this.player.changeColor(0)
     } else {
-
       let enemy = databus.enemys[0]
       console.log('isLiving' + enemy.isLiving)
       if (enemy.isLiving != 1) {
@@ -324,7 +323,6 @@ export default class Main {
             databus.life = databus.life - 1
           }
           
-          
           return;
         }else{
           
@@ -383,7 +381,6 @@ export default class Main {
       return;
     }
 
-    console.log(this.bg)
     area = this.bg.rankBtnArea
 
     if (x >= area.startX &&
