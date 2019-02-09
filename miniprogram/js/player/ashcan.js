@@ -42,7 +42,6 @@ export default class Ashcan {
       this.ashcans[i] = new Sprite(cans[i], PLAYER_WIDTH, PLAYER_HEIGHT,
         (i + 1) * (screenWidth - 10) / (this.canNumber + 1) + 5 - PLAYER_WIDTH / 2, 
         screenHeight - PLAYER_HEIGHT - 30)
-      console.log(this.ashcans[i].x)
     }
     // this.x1 = screenWidth / 4 - this.width / 2
     // this.y1 = screenHeight - this.height - 30

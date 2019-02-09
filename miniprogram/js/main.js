@@ -8,6 +8,11 @@ import Ashcan from './player/ashcan'
 import HOME from './home/home'
 let ctx = canvas.getContext('2d')
 let databus = new DataBus()
+let introPage = new Image()
+introPage.src = 'images/intro.jpg'
+
+const screenWidth = window.innerWidth
+const screenHeight = window.innerHeight
 
 wx.cloud.init()
 const db = wx.cloud.database()
@@ -23,9 +28,8 @@ export default class Main {
 
     // 0 present the normal and 1 present the difficult
     this.gameMode = 0
-
-    // create the initial page and response the touch
-    this.home()
+    // display the introduction page
+    this.intro()
     this.login()
   }
 
@@ -360,6 +364,52 @@ export default class Main {
   }
 
   /**
+   * display the introduction page
+   */
+  intro() {
+    canvas.removeEventListener(
+      'touchstart',
+      this.touchHandler
+    )
+    this.hasEventBind = true
+    this.touchHandler = this.introTouch.bind(this)
+    canvas.addEventListener('touchstart', this.touchHandler)
+    // display the image
+    this.intro_render()
+    this.bindLoop = this.intro_loop.bind(this)
+    this.hasEventBind = false
+
+    // 清除上一局的动画
+    window.cancelAnimationFrame(this.aniId);
+
+    this.aniId = window.requestAnimationFrame(
+      this.bindLoop,
+      canvas
+    )
+  }
+
+  /**
+   * the loop for the introduction
+   */
+  intro_loop() {
+    this.intro_render()
+    this.aniId = window.requestAnimationFrame(
+      this.bindLoop,
+      canvas
+    )
+  }
+
+  /**
+   * render the introduction page
+   */
+  intro_render() {
+    ctx.drawImage(introPage, 
+    0, 0, 
+    introPage.width, introPage.height, 
+    0, 0, screenWidth, screenHeight)
+  }
+
+  /**
    * the touch handler for the three buttons on the initial page.
    * note that the restart function will remove the touch handler, 
    * so the function should return immediately after the touch response.
@@ -409,6 +459,15 @@ export default class Main {
   changeMode() {
     this.gameMode = (this.gameMode + 1) % 2
     this.bg.changeModeIcon()
+  }
+
+  /**
+   * the touch handler in the introduction page, start the game when touched
+   * @param {object} e: the touch event
+   */
+  introTouch(e) {
+    e.preventDefault()
+    this.home()
   }
 
 
