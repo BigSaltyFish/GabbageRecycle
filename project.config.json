@@ -9,8 +9,8 @@
 	},
 	"compileType": "game",
 	"libVersion": "2.2.5",
-	"appid": "wxffaa147055a04089",
-	"projectname": "classsification",
+	"appid": "wx9ba2ef97ed360931",
+	"projectname": "classification-master",
 	"miniprogramRoot": "miniprogram/",
 	"cloudfunctionRoot": "cloudfunction/",
 	"condition": {
