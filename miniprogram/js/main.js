@@ -29,7 +29,7 @@ export default class Main {
     // 0 present the normal and 1 present the difficult
     this.gameMode = 0
     // display the introduction page
-    this.intro()
+    this.pause(this.introTouch, this.intro_render)
     this.login()
   }
 
@@ -364,42 +364,6 @@ export default class Main {
   }
 
   /**
-   * display the introduction page
-   */
-  intro() {
-    canvas.removeEventListener(
-      'touchstart',
-      this.touchHandler
-    )
-    this.hasEventBind = true
-    this.touchHandler = this.introTouch.bind(this)
-    canvas.addEventListener('touchstart', this.touchHandler)
-    // display the image
-    this.intro_render()
-    this.bindLoop = this.intro_loop.bind(this)
-    this.hasEventBind = false
-
-    // 清除上一局的动画
-    window.cancelAnimationFrame(this.aniId);
-
-    this.aniId = window.requestAnimationFrame(
-      this.bindLoop,
-      canvas
-    )
-  }
-
-  /**
-   * the loop for the introduction
-   */
-  intro_loop() {
-    this.intro_render()
-    this.aniId = window.requestAnimationFrame(
-      this.bindLoop,
-      canvas
-    )
-  }
-
-  /**
    * render the introduction page
    */
   intro_render() {
@@ -505,4 +469,36 @@ export default class Main {
     )
   }
 
+  /**
+   * pause the game to display something.
+   * @param {function} touchHandler: the touch handler for the page
+   * @param {function} render: the function to draw the page
+   */
+  pause(touchHandler, render) {
+    canvas.removeEventListener(
+      'touchstart',
+      this.touchHandler
+    )
+    this.hasEventBind = true
+    console.log(this)
+    this.touchHandler = touchHandler.bind(this)
+    canvas.addEventListener('touchstart', this.touchHandler)
+    render()
+    this.bindLoop = (() => {
+      render()
+      this.aniId = window.requestAnimationFrame(
+        this.bindLoop,
+        canvas
+      )
+    }).bind(this)
+    this.hasEventBind = false
+
+    // 清除上一局的动画
+    window.cancelAnimationFrame(this.aniId);
+
+    this.aniId = window.requestAnimationFrame(
+      this.bindLoop,
+      canvas
+    )
+  }
 }
