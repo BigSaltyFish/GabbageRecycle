@@ -8,8 +8,12 @@ import Ashcan from './player/ashcan'
 import HOME from './home/home'
 let ctx = canvas.getContext('2d')
 let databus = new DataBus()
+let background = new Image()
+background.src = 'images/garbages/home_page.png'
 let introPage = new Image()
 introPage.src = 'images/intro.jpg'
+let tipImg = new Image()
+tipImg.src = 'images/tip.png'
 
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
@@ -411,7 +415,7 @@ export default class Main {
       x <= area.endX &&
       y >= area.startY &&
       y <= area.endY) {
-      this.restart()
+      this.pause(this.tipTouch, this.tip_render)
       return;
     }
 
@@ -467,6 +471,41 @@ export default class Main {
       this.bindLoop,
       canvas
     )
+  }
+
+  /**
+   * the function to render the tip on the screen.
+   * @param {number} gameMode: 0 for normal and 1 for difficult
+   */
+  tip_render(gameMode) {
+    // this.bg.bgRender(ctx)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(
+      background,
+      0,
+      0,
+      background.width,
+      background.height,
+      0,
+      0,
+      screenWidth,
+      screenHeight
+    )
+    ctx.drawImage(
+      tipImg,
+      0, 0, 
+      tipImg.width, tipImg.height, 
+      screenWidth / 6, screenHeight / 2 - screenWidth / 3, 
+      4 * screenWidth / 6, 2 * screenWidth / 3)
+  }
+
+  /**
+   * the touch handler for the tip
+   * @param {object} e: the touch event
+   */
+  tipTouch(e) {
+    e.preventDefault()
+    this.restart()
   }
 
   /**

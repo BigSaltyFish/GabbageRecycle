@@ -53,6 +53,25 @@ export default class BackGround extends Sprite {
   // }
 
   /**
+   * this function is for the tip render
+   * it only renders the background image
+   * @param {object} ctx: the rendering context
+   */
+  bgRender(ctx) {
+    ctx.drawImage(
+      this.img,
+      0,
+      0,
+      this.width,
+      this.height,
+      0,
+      this.top,
+      screenWidth,
+      screenHeight
+    )
+  }
+
+  /**
    * 背景图重绘函数
    * 绘制两张图片，两张图片大小和屏幕一致
    * 第一张漏出高度为top部分，其余的隐藏在屏幕上面
