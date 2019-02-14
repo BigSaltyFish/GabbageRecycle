@@ -111,7 +111,6 @@ export default class Enemy extends Animation {
     if (this.y > (window.innerHeight - PLAYER_HEIGHT / 2 - 30)) {
       if (this.isLiving == 0){
         this.isLiving = -1
-        
       }
         
       databus.updateColor=1

@@ -8,6 +8,12 @@ image.src = 'images/garbages/life.jpg'
 
 
 export default class GameInfo {
+  constructor(gameMode) {
+    gameData = {
+      mode: gameMode, 
+      date: new Date()
+    }
+  }
   renderGameScore(ctx, score) {
     ctx.fillStyle = "#ffffff"
     ctx.font      = "20px Arial"

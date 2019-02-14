@@ -19,7 +19,9 @@ const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
 
 wx.cloud.init()
-const db = wx.cloud.database()
+const db = wx.cloud.database({
+  env: 'classification-test-d20ada'
+})
 
 /**
  * 游戏主函数
@@ -32,18 +34,33 @@ export default class Main {
 
     // 0 present the normal and 1 present the difficult
     this.gameMode = 0
+    // this.test()
     // display the introduction page
     this.pause(this.introTouch, this.intro_render)
     this.login()
   }
 
+  test() {
+    wx.cloud.callFunction({
+      name: 'test',
+      data: {
+        a: 1,
+        b: 2
+      }
+    })
+      .then(res => {
+        console.log(res.result)
+      })
+      .catch(console.error)
+  }
+
   login() {
-    // 获取 openid
+    // get openid
     wx.cloud.callFunction({
       name: 'login',
       success: res => {
         window.openid = res.result.openid
-        this.prefetchHighScore()
+        this.personalHighScore = res.result.score
       },
       fail: err => {
         console.error('get openid failed with error', err)
@@ -51,6 +68,7 @@ export default class Main {
     })
   }
 
+  // abondoned
   prefetchHighScore() {
     // 预取历史最高分
     db.collection('score').doc(`${window.openid}-score`).get()
@@ -85,7 +103,7 @@ export default class Main {
 
     this.bg = new BackGround(ctx)
     this.player = new Ashcan(ctx, this.gameMode)
-    this.gameinfo = new GameInfo()
+    this.gameinfo = new GameInfo(this.gameMode)
     this.music = new Music()
 
     this.bindLoop = this.loop.bind(this)
@@ -249,7 +267,8 @@ export default class Main {
         if (enemy.classification == classification) {
           enemy.comeout(enemy.x, enemy.y, enemy.classification)
           this.player.changeColor(databus.enemys[0].classification)
-          databus.score += 1
+          if (this.gameMode == 0) databus.score += 20
+          else if (this.gameMode == 1) databus.score += 30
           //break
         }
       }
@@ -259,6 +278,7 @@ export default class Main {
     //}
 
     if (databus.gameOver) {
+
       let area = this.gameinfo.btnArea
 
       if (x >= area.startX &&
@@ -519,7 +539,6 @@ export default class Main {
       this.touchHandler
     )
     this.hasEventBind = true
-    console.log(this)
     this.touchHandler = touchHandler.bind(this)
     canvas.addEventListener('touchstart', this.touchHandler)
     render()
