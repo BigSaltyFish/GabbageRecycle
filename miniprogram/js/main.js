@@ -33,7 +33,7 @@ export default class Main {
     this.personalHighScore = null
 
     // 0 present the normal and 1 present the difficult
-    this.gameMode = 0
+    databus.mode = 0
     // this.test()
     // display the introduction page
     this.pause(this.introTouch, this.intro_render)
@@ -102,9 +102,11 @@ export default class Main {
     canvas.addEventListener('touchstart', this.touchHandler)
 
     this.bg = new BackGround(ctx)
-    this.player = new Ashcan(ctx, this.gameMode)
-    this.gameinfo = new GameInfo(this.gameMode)
+    this.player = new Ashcan(ctx, databus.mode)
+    this.gameinfo = new GameInfo(databus.mode)
     this.music = new Music()
+
+    databus.cans = this.player
 
     this.bindLoop = this.loop.bind(this)
     this.hasEventBind = false
@@ -267,8 +269,8 @@ export default class Main {
         if (enemy.classification == classification) {
           enemy.comeout(enemy.x, enemy.y, enemy.classification)
           this.player.changeColor(databus.enemys[0].classification)
-          if (this.gameMode == 0) databus.score += 20
-          else if (this.gameMode == 1) databus.score += 30
+          if (databus.mode == 0) databus.score += 20
+          else if (databus.mode == 1) databus.score += 30
           //break
         }
       }
@@ -445,7 +447,7 @@ export default class Main {
    * change the mode of the game, together the icon of the mode button
    */
   changeMode() {
-    this.gameMode = (this.gameMode + 1) % 2
+    databus.mode = (databus.mode + 1) % 2
     this.bg.changeModeIcon()
   }
 

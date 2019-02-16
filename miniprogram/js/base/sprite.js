@@ -14,6 +14,9 @@ export default class Sprite {
     this.x = x
     this.y = y
 
+    this.center_x = this.x + this.width / 2
+    this.center_y = this.y + this.height / 2
+
     this.visible = true
   }
 

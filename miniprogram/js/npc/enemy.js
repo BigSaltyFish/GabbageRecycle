@@ -1,5 +1,6 @@
 import Animation from '../base/animation'
 import DataBus from '../databus'
+import Ashcan from '../player/ashcan.js'
 
 const ENEMY_WIDTH = 60
 const ENEMY_HEIGHT = 60
@@ -9,15 +10,41 @@ const screenHeight = window.innerHeight
 const PLAYER_WIDTH = 25 * 2
 const PLAYER_HEIGHT = 63 * 2
 
+const normalGabbage = new Array(
+  {
+    name: 'dry',
+    size: 5
+  },
+  {
+    name: 'recyclable',
+    size: 7
+  },
+  {
+    name: 'wet',
+    size: 5
+  },
+  {
+    name: 'harmful',
+    size: 6
+  }
+)
+
+const difficultGabbage = new Array(
+  {},
+  {},
+  {},
+  {},
+  {}
+)
+
+// a set for all the gabbages
+const gabbageSet = new Array(
+  normalGabbage, difficultGabbage
+)
+
 const __ = {
   speed: Symbol('speed'),
   move: Symbol('move')
-}
-const garbages = {
-  dry: 'dry_garbage',
-  recyclable: 'recyclable_trash',
-  wet: 'wet_garbage',
-  harmful: 'harmful_garbage'
 }
 
 let databus = new DataBus()
@@ -28,33 +55,27 @@ function rnd(start, end) {
 
 export default class Enemy extends Animation {
   constructor() {
-    
-    let CLASSIFICATION = Math.floor(Math.random() * 4) + 1
-    let classification = CLASSIFICATION
-    let NUMBER = Math.floor(Math.random() * 5) + 1
-    let GARBAGE_NUMBER = ''
-    switch (classification) {
-      case 1:
-        GARBAGE_NUMBER = garbages.dry
-        break
-      case 2:
-        GARBAGE_NUMBER = garbages.recyclable
-        break
-      case 3:
-        GARBAGE_NUMBER = garbages.wet
-        break
-      case 4:
-        GARBAGE_NUMBER = garbages.harmful
-        break
-    }
+    let gabbageNumber = 0
+    if(databus.mode == 0) gabbageNumber = 4
+    else if(databus.mode == 1) gabbageNumber = 5
 
-    let ENEMY_IMG_SRC = 'images/garbages/' + GARBAGE_NUMBER + '/' + NUMBER + '.png'
+    let CLASSIFICATION = Math.floor(Math.random() * gabbageNumber) + 1
+    let classification = CLASSIFICATION
+    let NUMBER = Math.floor(Math.random() * 
+      gabbageSet[databus.mode][classification - 1].size) + 1
+    
+    let ENEMY_IMG_SRC = 'images/garbages/' + 
+      gabbageSet[databus.mode][classification - 1].name + '/' + NUMBER + '.png'
     super(ENEMY_IMG_SRC, ENEMY_WIDTH, ENEMY_HEIGHT)
     this.classification = classification
     //this.initExplosionAnimation()
   }
 
   init(speed) {
+    let gabbageNumber = 0
+    if (databus.mode == 0) gabbageNumber = 4
+    else if (databus.mode == 1) gabbageNumber = 5
+
     this.color_bright = 0
     this.x = rnd(0, window.innerWidth - ENEMY_WIDTH)
     this.y = -this.height
@@ -62,26 +83,14 @@ export default class Enemy extends Animation {
     this[__.move] = 0
     this.isLiving = 0
     this.visible = true
-    let CLASSIFICATION = Math.floor(Math.random() * 4) + 1
+    let CLASSIFICATION = Math.floor(Math.random() * gabbageNumber) + 1
     let classification = CLASSIFICATION
-    let NUMBER = Math.floor(Math.random() * 5) + 1
-    let GARBAGE_NUMBER = ''
-    switch (classification) {
-      case 1:
-        GARBAGE_NUMBER = garbages.dry
-        break
-      case 2:
-        GARBAGE_NUMBER = garbages.recyclable
-        break
-      case 3:
-        GARBAGE_NUMBER = garbages.wet
-        break
-      case 4:
-        GARBAGE_NUMBER = garbages.harmful
-        break
-    }
+    console.log(gabbageSet[databus.mode][classification - 1])
+    let NUMBER = Math.floor(Math.random() *
+      gabbageSet[databus.mode][classification - 1].size) + 1
 
-    this.img.src = 'images/garbages/' + GARBAGE_NUMBER + '/' + NUMBER + '.png'
+    let ENEMY_IMG_SRC = 'images/garbages/' +
+      gabbageSet[databus.mode][classification - 1].name + '/' + NUMBER + '.png'
     this.classification = classification
     // console.log(this.classification)
   }
@@ -120,18 +129,20 @@ export default class Enemy extends Animation {
   }
   comeout(x, y, classifition) {
     this.isLiving = 1
-    let center_x = 0
-    let center_y = (screenHeight - PLAYER_HEIGHT / 2 - 30)
-    if (classifition == 1) {
-      center_x = (screenWidth / 8 - ENEMY_WIDTH / 2)
-    } else if (classifition == 2) {
-      center_x = (screenWidth * 3 / 8 - ENEMY_WIDTH / 2)
-    } else if (classifition == 3) {
-      center_x = (screenWidth * 5 / 8 - ENEMY_WIDTH / 2)
-    } else if (classifition == 4) {
-      center_x = (screenWidth * 7 / 8 - ENEMY_WIDTH / 2)
-    }
-    console.log('center-x:' + center_x + 'center-y:' + center_y)
+    // let center_x = 0
+    // let center_y = (screenHeight - PLAYER_HEIGHT / 2 - 30)
+    // if (classifition == 1) {
+    //   center_x = (screenWidth / 8 - ENEMY_WIDTH / 2)
+    // } else if (classifition == 2) {
+    //   center_x = (screenWidth * 3 / 8 - ENEMY_WIDTH / 2)
+    // } else if (classifition == 3) {
+    //   center_x = (screenWidth * 5 / 8 - ENEMY_WIDTH / 2)
+    // } else if (classifition == 4) {
+    //   center_x = (screenWidth * 7 / 8 - ENEMY_WIDTH / 2)
+    // }
+    // console.log('center-x:' + center_x + 'center-y:' + center_y)
+    let center_x = databus.cans.ashcans[classifition - 1].center_x
+    let center_y = databus.cans.ashcans[classifition - 1].center_y
 
     let error_x = center_x - x
     let error_y = center_y - y

@@ -18,7 +18,6 @@ const NORMAL_CANS = new Array('images/garbages/dry_ashcan.png',
   'images/garbages/harmful_ashcan.png')
 const DIFFICULT_CANS = new Array(5)
 
-
 const PLAYER_WIDTH = 25 * 2
 const PLAYER_HEIGHT = 63 * 2
 

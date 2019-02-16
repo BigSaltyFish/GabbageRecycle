@@ -18,6 +18,7 @@ export default class DataBus {
   }
 
   reset() {
+    this.mode = 0
     this.updateColor = 0
     this.life = 5
     this.frame      = 0

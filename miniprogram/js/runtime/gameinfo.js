@@ -9,7 +9,7 @@ image.src = 'images/garbages/life.jpg'
 
 export default class GameInfo {
   constructor(gameMode) {
-    gameData = {
+    this.gameData = {
       mode: gameMode, 
       date: new Date()
     }
@@ -29,8 +29,6 @@ export default class GameInfo {
     for(let i=0;i<lifeNumber;i++){
       ctx.drawImage(image, 0, 0, 753, 1000, 2,30+30*i, 30, 30)
     }
-    
-
   }
 
   renderGameOver(ctx, score, personalHighScore) {
