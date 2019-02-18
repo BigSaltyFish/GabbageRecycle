@@ -11,7 +11,8 @@ export default class GameInfo {
   constructor(gameMode) {
     this.gameData = {
       mode: gameMode, 
-      date: new Date()
+      startTime: (new Date()).toUTCString(),
+      record: []
     }
   }
   renderGameScore(ctx, score) {

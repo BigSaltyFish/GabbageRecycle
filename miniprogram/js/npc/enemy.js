@@ -66,9 +66,9 @@ export default class Enemy extends Animation {
     
     let ENEMY_IMG_SRC = 'images/garbages/' + 
       gabbageSet[databus.mode][classification - 1].name + '/' + NUMBER + '.png'
+
     super(ENEMY_IMG_SRC, ENEMY_WIDTH, ENEMY_HEIGHT)
     this.classification = classification
-    //this.initExplosionAnimation()
   }
 
   init(speed) {
@@ -85,12 +85,12 @@ export default class Enemy extends Animation {
     this.visible = true
     let CLASSIFICATION = Math.floor(Math.random() * gabbageNumber) + 1
     let classification = CLASSIFICATION
-    console.log(gabbageSet[databus.mode][classification - 1])
     let NUMBER = Math.floor(Math.random() *
       gabbageSet[databus.mode][classification - 1].size) + 1
 
     let ENEMY_IMG_SRC = 'images/garbages/' +
       gabbageSet[databus.mode][classification - 1].name + '/' + NUMBER + '.png'
+
     this.classification = classification
     // console.log(this.classification)
   }
@@ -122,7 +122,7 @@ export default class Enemy extends Animation {
         this.isLiving = -1
       }
         
-      databus.updateColor=1
+      databus.updateColor = 1
       databus.removeEnemey(this)
     }
 
@@ -144,8 +144,8 @@ export default class Enemy extends Animation {
     let center_x = databus.cans.ashcans[classifition - 1].center_x
     let center_y = databus.cans.ashcans[classifition - 1].center_y
 
-    let error_x = center_x - x
-    let error_y = center_y - y
+    let error_x = center_x - x + ENEMY_WIDTH / 2
+    let error_y = center_y - y + ENEMY_HEIGHT / 2
     let ratio = error_y / this[__.speed]
     this[__.speed] = this[__.speed] * 5
     this[__.move] = error_x / ratio * 5

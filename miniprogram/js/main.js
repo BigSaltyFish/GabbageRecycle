@@ -130,66 +130,13 @@ export default class Main {
       // enemy.init(6)
       enemy.init(2, Math.floor(Math.random() * 4) + 1)
       databus.enemys.push(enemy)
+      console.log(enemy.classification)
+      console.log(enemy.img.src)
     }
   }
 
 
   // 全局碰撞检测
-  // collisionDetection() {
-  //   let that = this
-
-  //   databus.bullets.forEach((bullet) => {
-  //     for ( let i = 0, il = databus.enemys.length; i < il;i++ ) {
-  //       let enemy = databus.enemys[i]
-
-  //       if ( !enemy.isPlaying && enemy.isCollideWith(bullet) ) {
-  //         enemy.playAnimation()
-  //         that.music.playExplosion()
-
-  //         bullet.visible = false
-  //         databus.score  += 1
-
-  //         break
-  //       }
-  //     }
-  //   })
-
-  //   for ( let i = 0, il = databus.enemys.length; i < il;i++ ) {
-  //     let enemy = databus.enemys[i]
-
-  //     if ( this.player.isCollideWith(enemy) ) {
-  //       databus.gameOver = true
-
-  //       // 获取历史高分
-  //       if (this.personalHighScore) {
-  //         if (databus.score > this.personalHighScore) {
-  //           this.personalHighScore = databus.score
-  //         }
-  //       }
-
-  //       // 上传结果
-  //       // 调用 uploadScore 云函数
-  //       wx.cloud.callFunction({
-  //         name: 'uploadScore',
-  //         // data 字段的值为传入云函数的第一个参数 event
-  //         data: {
-  //           score: databus.score
-  //         },
-  //         success: res => {
-  //           if (this.prefetchHighScoreFailed) {
-  //             this.prefetchHighScore()
-  //           }
-  //         },
-  //         fail: err => {
-  //           console.error('upload score failed', err)
-  //         }
-  //       })
-
-  //       break
-  //     }
-  //   }
-  // }
-
   collisionDetection() {
     let that = this
 
@@ -250,6 +197,8 @@ export default class Main {
   touchEventHandler(e) {
     e.preventDefault()
 
+    const normalName = ['dry', 'recyclable', 'wet', 'harmful']
+
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
     let classification = this.player.whichIsTouched(x, y)
@@ -264,7 +213,11 @@ export default class Main {
       this.player.changeColor(0)
     } else {
       let enemy = databus.enemys[0]
-      console.log('isLiving' + enemy.isLiving)
+      // console.log('isLiving' + enemy.isLiving)
+      // console.log('enemy:')
+      // console.log(enemy)
+      // console.log(enemy.classification)
+      // console.log(enemy.img.src)
       if (enemy.isLiving != 1) {
         if (enemy.classification == classification) {
           enemy.comeout(enemy.x, enemy.y, enemy.classification)
@@ -274,12 +227,29 @@ export default class Main {
           //break
         }
       }
-    
+      let piece = {
+        choose: normalName[classification - 1],
+        answer: normalName[enemy.classification - 1]
+      }
+      this.gameinfo.gameData.record.push(piece)
     }  
       // }
     //}
 
     if (databus.gameOver) {
+      let refresh = databus.score > this.personalHighScore
+      this.gameinfo.gameData.score = databus.score
+      this.gameinfo.gameData.endTime = (new Date()).toUTCString()
+      let tmp = this.gameinfo.gameData
+      wx.cloud.callFunction({
+        name: 'upload', 
+        data: {
+          openid: window.openid, 
+          breakRec: refresh, 
+          record: tmp
+        }
+      })
+
 
       let area = this.gameinfo.btnArea
 
@@ -342,7 +312,7 @@ export default class Main {
 
     // this.bg.update()
 
-   databus.enemys.forEach((item) => {
+    databus.enemys.forEach((item) => {
         item.update()
         if (item.isLiving == -1) {
 

@@ -44,10 +44,6 @@ export default class Ashcan {
     }
     // this.x1 = screenWidth / 4 - this.width / 2
     // this.y1 = screenHeight - this.height - 30
-    // this.sprite1 = new Sprite(PLAYER_NORMAL_IMG_SRC1, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    // this.sprite2 = new Sprite(PLAYER_NORMAL_IMG_SRC2, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    // this.sprite3 = new Sprite(PLAYER_NORMAL_IMG_SRC3, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    // this.sprite4 = new Sprite(PLAYER_NORMAL_IMG_SRC4, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
     
 
     // 玩家默认处于屏幕底部居中位置
@@ -215,10 +211,6 @@ export default class Ashcan {
     for(let i = 0; i < this.canNumber; i++) {
       this.ashcans[i].drawToCanvas(ctx)
     }
-    // this.sprite1.drawToCanvas(ctx)
-    // this.sprite2.drawToCanvas(ctx)
-    // this.sprite3.drawToCanvas(ctx)
-    // this.sprite4.drawToCanvas(ctx)
   }
 
   /**
@@ -234,7 +226,6 @@ export default class Ashcan {
         x < ((i + 1) * (screenWidth - 10) / (this.canNumber + 1) + 5 + PLAYER_WIDTH / 2) && 
       y > (screenHeight - PLAYER_HEIGHT - 30) && 
       y < (screenHeight - 30)) {
-        console.log(i + 1)
         return i + 1
       }
     }
