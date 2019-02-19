@@ -13,12 +13,12 @@ export default class DataBus {
     instance = this
 
     this.pool = new Pool()
+    this.mode = 0
 
     this.reset()
   }
 
   reset() {
-    this.mode = 0
     this.updateColor = 0
     this.life = 5
     this.frame      = 0

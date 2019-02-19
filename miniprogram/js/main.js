@@ -34,7 +34,6 @@ export default class Main {
 
     // 0 present the normal and 1 present the difficult
     databus.mode = 0
-    // this.test()
     // display the introduction page
     this.pause(this.introTouch, this.intro_render)
     this.login()
@@ -192,11 +191,12 @@ export default class Main {
     }
   }
 
-  // 游戏结束后的触摸事件处理逻辑
-  // 这个是点击垃圾桶的处理逻辑吧？
+  /**
+   * response the touch on the cans
+   * @param {object} e: the touch event
+   */
   touchEventHandler(e) {
     e.preventDefault()
-
     const normalName = ['dry', 'recyclable', 'wet', 'harmful']
 
     let x = e.touches[0].clientX
@@ -205,54 +205,29 @@ export default class Main {
 
     let that = this
 
-
-    //for (let i = 0, il = databus.enemys.length; i < il; i++) {
-      // if (databus.enemys.length > 0) {
-
     if (databus.enemys.length == 0) {
       this.player.changeColor(0)
     } else {
       let enemy = databus.enemys[0]
-      // console.log('isLiving' + enemy.isLiving)
-      // console.log('enemy:')
-      // console.log(enemy)
-      // console.log(enemy.classification)
-      // console.log(enemy.img.src)
       if (enemy.isLiving != 1) {
         if (enemy.classification == classification) {
           enemy.comeout(enemy.x, enemy.y, enemy.classification)
           this.player.changeColor(databus.enemys[0].classification)
           if (databus.mode == 0) databus.score += 20
           else if (databus.mode == 1) databus.score += 30
-          //break
         }
+
+        let piece = {
+          choose: normalName[classification - 1],
+          answer: normalName[enemy.classification - 1]
+        }
+        this.gameinfo.gameData.record.push(piece)
       }
-      let piece = {
-        choose: normalName[classification - 1],
-        answer: normalName[enemy.classification - 1]
-      }
-      this.gameinfo.gameData.record.push(piece)
-    }  
-      // }
-    //}
+      
+    }
 
     if (databus.gameOver) {
-      let refresh = databus.score > this.personalHighScore
-      this.gameinfo.gameData.score = databus.score
-      this.gameinfo.gameData.endTime = (new Date()).toUTCString()
-      let tmp = this.gameinfo.gameData
-      wx.cloud.callFunction({
-        name: 'upload', 
-        data: {
-          openid: window.openid, 
-          breakRec: refresh, 
-          record: tmp
-        }
-      })
-
-
       let area = this.gameinfo.btnArea
-
       if (x >= area.startX &&
         x <= area.endX &&
         y >= area.startY &&
@@ -311,6 +286,7 @@ export default class Main {
       return;
 
     // this.bg.update()
+    let that = this
 
     databus.enemys.forEach((item) => {
         item.update()
@@ -319,6 +295,20 @@ export default class Main {
           if(databus.life==1){
             databus.life = databus.life - 1
             databus.gameOver = true
+
+            let refresh = databus.score > that.personalHighScore
+            that.gameinfo.gameData.score = databus.score
+            that.gameinfo.gameData.endTime = (new Date()).toUTCString()
+            let tmp = that.gameinfo.gameData
+            wx.cloud.callFunction({
+              name: 'upload',
+              data: {
+                openid: window.openid,
+                breakRec: refresh,
+                record: tmp
+              }
+            })
+
           }else{
             databus.life = databus.life - 1
           }
@@ -335,10 +325,6 @@ export default class Main {
     }
     
     this.enemyGenerate()
-
-    
-    // this.collisionDetection()
-    // this.touchEventHandler()
 
     // if (databus.frame % 20 === 0) {
     //   // this.player.shoot()
@@ -419,6 +405,8 @@ export default class Main {
   changeMode() {
     databus.mode = (databus.mode + 1) % 2
     this.bg.changeModeIcon()
+    console.log('touched!')
+    console.log(databus.mode)
   }
 
   /**

@@ -30,11 +30,26 @@ const normalGabbage = new Array(
 )
 
 const difficultGabbage = new Array(
-  {},
-  {},
-  {},
-  {},
-  {}
+  {
+    name: 'coarse',
+    size: 4
+  },
+  {
+    name: 'combustible',
+    size: 8
+  },
+  {
+    name: 'non-burnable',
+    size: 7
+  },
+  {
+    name: 'plastic-packaging',
+    size: 4
+  },
+  {
+    name: 'resource',
+    size: 2
+  }
 )
 
 // a set for all the gabbages
@@ -56,15 +71,22 @@ function rnd(start, end) {
 export default class Enemy extends Animation {
   constructor() {
     let gabbageNumber = 0
-    if(databus.mode == 0) gabbageNumber = 4
-    else if(databus.mode == 1) gabbageNumber = 5
+    let modeString = ''
+    if(databus.mode == 0) {
+      gabbageNumber = 4
+      modeString = 'normal/'
+    }
+    else if(databus.mode == 1) {
+      gabbageNumber = 5
+      modeString = 'difficult/'
+    }
 
     let CLASSIFICATION = Math.floor(Math.random() * gabbageNumber) + 1
     let classification = CLASSIFICATION
     let NUMBER = Math.floor(Math.random() * 
       gabbageSet[databus.mode][classification - 1].size) + 1
     
-    let ENEMY_IMG_SRC = 'images/garbages/' + 
+    let ENEMY_IMG_SRC = 'images/garbages/' + modeString +
       gabbageSet[databus.mode][classification - 1].name + '/' + NUMBER + '.png'
 
     super(ENEMY_IMG_SRC, ENEMY_WIDTH, ENEMY_HEIGHT)
@@ -73,8 +95,15 @@ export default class Enemy extends Animation {
 
   init(speed) {
     let gabbageNumber = 0
-    if (databus.mode == 0) gabbageNumber = 4
-    else if (databus.mode == 1) gabbageNumber = 5
+    let modeString = ''
+    if (databus.mode == 0) {
+      gabbageNumber = 4
+      modeString = 'normal/'
+    }
+    else if (databus.mode == 1) {
+      gabbageNumber = 5
+      modeString = 'difficult/'
+    }
 
     this.color_bright = 0
     this.x = rnd(0, window.innerWidth - ENEMY_WIDTH)
@@ -88,10 +117,11 @@ export default class Enemy extends Animation {
     let NUMBER = Math.floor(Math.random() *
       gabbageSet[databus.mode][classification - 1].size) + 1
 
-    let ENEMY_IMG_SRC = 'images/garbages/' +
+    let ENEMY_IMG_SRC = 'images/garbages/' + modeString +
       gabbageSet[databus.mode][classification - 1].name + '/' + NUMBER + '.png'
 
     this.classification = classification
+    this.img.src = ENEMY_IMG_SRC
     // console.log(this.classification)
   }
 
@@ -129,23 +159,11 @@ export default class Enemy extends Animation {
   }
   comeout(x, y, classifition) {
     this.isLiving = 1
-    // let center_x = 0
-    // let center_y = (screenHeight - PLAYER_HEIGHT / 2 - 30)
-    // if (classifition == 1) {
-    //   center_x = (screenWidth / 8 - ENEMY_WIDTH / 2)
-    // } else if (classifition == 2) {
-    //   center_x = (screenWidth * 3 / 8 - ENEMY_WIDTH / 2)
-    // } else if (classifition == 3) {
-    //   center_x = (screenWidth * 5 / 8 - ENEMY_WIDTH / 2)
-    // } else if (classifition == 4) {
-    //   center_x = (screenWidth * 7 / 8 - ENEMY_WIDTH / 2)
-    // }
-    // console.log('center-x:' + center_x + 'center-y:' + center_y)
     let center_x = databus.cans.ashcans[classifition - 1].center_x
     let center_y = databus.cans.ashcans[classifition - 1].center_y
 
-    let error_x = center_x - x + ENEMY_WIDTH / 2
-    let error_y = center_y - y + ENEMY_HEIGHT / 2
+    let error_x = center_x - x - ENEMY_WIDTH / 2
+    let error_y = center_y - y - ENEMY_HEIGHT / 2
     let ratio = error_y / this[__.speed]
     this[__.speed] = this[__.speed] * 5
     this[__.move] = error_x / ratio * 5
