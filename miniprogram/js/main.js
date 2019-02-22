@@ -10,8 +10,7 @@ let ctx = canvas.getContext('2d')
 let databus = new DataBus()
 let background = new Image()
 background.src = 'images/garbages/home_page.png'
-let introPage = new Image()
-introPage.src = 'images/intro.jpg'
+let introPage = databus.images.introPage
 let tipImg = new Image()
 tipImg.src = 'images/tip.png'
 
@@ -31,7 +30,6 @@ export default class Main {
     // 维护当前requestAnimationFrame的id
     this.aniId = 0
     this.personalHighScore = null
-
     // 0 present the normal and 1 present the difficult
     databus.mode = 0
     // display the introduction page
@@ -129,8 +127,6 @@ export default class Main {
       // enemy.init(6)
       enemy.init(2, Math.floor(Math.random() * 4) + 1)
       databus.enemys.push(enemy)
-      console.log(enemy.classification)
-      console.log(enemy.img.src)
     }
   }
 
@@ -441,7 +437,7 @@ export default class Main {
 
   }
   home_render() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.clearRect(0, 0, screenWidth, screenHeight)
 
     this.bg.render(ctx)
   }
@@ -462,15 +458,16 @@ export default class Main {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.drawImage(
       background,
+      145,
       0,
-      0,
-      background.width,
-      background.height,
+      screenWidth,
+      screenHeight,
       0,
       0,
       screenWidth,
       screenHeight
     )
+
     ctx.drawImage(
       tipImg,
       0, 0, 

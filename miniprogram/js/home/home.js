@@ -3,7 +3,7 @@ import Sprite from '../base/sprite'
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
 
-const BG_IMG_SRC = 'images/garbages/home_page.png'
+const BG_IMG_SRC = `${wx.env.USER_DATA_PATH}/home_page.png`
 const BG_WIDTH = 512
 const BG_HEIGHT = 512
 
@@ -60,10 +60,10 @@ export default class BackGround extends Sprite {
   bgRender(ctx) {
     ctx.drawImage(
       this.img,
+      145,
       0,
-      0,
-      this.width,
-      this.height,
+      screenWidth,
+      screenHeight,
       0,
       this.top,
       screenWidth,
@@ -92,10 +92,10 @@ export default class BackGround extends Sprite {
 
     ctx.drawImage(
       this.img,
+      145,
       0,
-      0,
-      this.width,
-      this.height,
+      screenWidth,
+      screenHeight,
       0,
       this.top,
       screenWidth,

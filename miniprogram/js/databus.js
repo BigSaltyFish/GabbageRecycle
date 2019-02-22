@@ -1,4 +1,5 @@
 import Pool from './base/pool'
+import ImageManager from './image.js'
 
 let instance
 
@@ -12,6 +13,7 @@ export default class DataBus {
 
     instance = this
 
+    this.images = new ImageManager()
     this.pool = new Pool()
     this.mode = 0
 
