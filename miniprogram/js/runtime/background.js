@@ -1,9 +1,11 @@
 import Sprite from '../base/sprite'
+import DataBus from '../databus.js'
 
 const screenWidth  = window.innerWidth
 const screenHeight = window.innerHeight
+let databus = new DataBus()
 
-const BG_IMG_SRC   = 'images/bg.jpg'
+const BG_IMG   = databus.images.bg
 const BG_WIDTH     = 512
 const BG_HEIGHT    = 512
 
@@ -13,7 +15,7 @@ const BG_HEIGHT    = 512
  */
 export default class BackGround extends Sprite {
   constructor(ctx) {
-    super(BG_IMG_SRC, BG_WIDTH, BG_HEIGHT)
+    super(BG_IMG, BG_WIDTH, BG_HEIGHT)
 
     this.top = 0
 

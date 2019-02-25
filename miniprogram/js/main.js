@@ -8,11 +8,9 @@ import Ashcan from './player/ashcan'
 import HOME from './home/home'
 let ctx = canvas.getContext('2d')
 let databus = new DataBus()
-let background = new Image()
-background.src = 'images/garbages/home_page.png'
+let background = databus.images.home_page
 let introPage = databus.images.introPage
-let tipImg = new Image()
-tipImg.src = 'images/tip.png'
+let tipImg = databus.images.tipImg
 
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
@@ -401,8 +399,6 @@ export default class Main {
   changeMode() {
     databus.mode = (databus.mode + 1) % 2
     this.bg.changeModeIcon()
-    console.log('touched!')
-    console.log(databus.mode)
   }
 
   /**

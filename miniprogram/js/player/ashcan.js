@@ -2,16 +2,18 @@ import Sprite from '../base/sprite'
 import Bullet from './bullet'
 import DataBus from '../databus'
 
+let databus = new DataBus()
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
 
 // 玩家相关常量设置
-const DARK_CAN = 'images/garbages/normal/cans/dark.png'
-const NORMAL_CANS = new Array(
-  'images/garbages/normal/cans/dry_ashcan.png',
-  'images/garbages/normal/cans/recyclable_ashcan.png',
-  'images/garbages/normal/cans/wet_ashcan.png',
-  'images/garbages/normal/cans/harmful_ashcan.png')
+const DARK_CAN = databus.images.dark_can
+const NORMAL_CANS = databus.images.normal_cans
+// new Array(
+//   'images/garbages/normal/cans/dry_ashcan.png',
+//   'images/garbages/normal/cans/recyclable_ashcan.png',
+//   'images/garbages/normal/cans/wet_ashcan.png',
+//   'images/garbages/normal/cans/harmful_ashcan.png')
 const DIFFICULT_CANS = new Array(
   'images/gabbages/difficult/cans/coarse_ashcan.png',
   'images/gabbages/difficult/cans/combustible_ashcan.png',
@@ -23,7 +25,6 @@ const DIFFICULT_CANS = new Array(
 const PLAYER_WIDTH = 25 * 2
 const PLAYER_HEIGHT = 63 * 2
 
-let databus = new DataBus()
 let cans
 
 export default class Ashcan {

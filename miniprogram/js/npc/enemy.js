@@ -84,12 +84,13 @@ export default class Enemy extends Animation {
     let CLASSIFICATION = Math.floor(Math.random() * gabbageNumber) + 1
     let classification = CLASSIFICATION
     let NUMBER = Math.floor(Math.random() * 
-      gabbageSet[databus.mode][classification - 1].size) + 1
+      gabbageSet[databus.mode][classification - 1].size)
     
-    let ENEMY_IMG_SRC = 'images/garbages/' + modeString +
-      gabbageSet[databus.mode][classification - 1].name + '/' + NUMBER + '.png'
+    // let ENEMY_IMG_SRC = 'images/garbages/' + modeString +
+    //   gabbageSet[databus.mode][classification - 1].name + '/' + NUMBER + '.png'
+    let ENEMY_IMG = databus.images.gabbage[databus.mode][classification - 1][NUMBER]
 
-    super(ENEMY_IMG_SRC, ENEMY_WIDTH, ENEMY_HEIGHT)
+    super(ENEMY_IMG, ENEMY_WIDTH, ENEMY_HEIGHT)
     this.classification = classification
   }
 
@@ -115,13 +116,11 @@ export default class Enemy extends Animation {
     let CLASSIFICATION = Math.floor(Math.random() * gabbageNumber) + 1
     let classification = CLASSIFICATION
     let NUMBER = Math.floor(Math.random() *
-      gabbageSet[databus.mode][classification - 1].size) + 1
+      gabbageSet[databus.mode][classification - 1].size)
 
-    let ENEMY_IMG_SRC = 'images/garbages/' + modeString +
-      gabbageSet[databus.mode][classification - 1].name + '/' + NUMBER + '.png'
-
+    let ENEMY_IMG = databus.images.gabbage[databus.mode][classification - 1][NUMBER]
     this.classification = classification
-    this.img.src = ENEMY_IMG_SRC
+    this.img = ENEMY_IMG
     // console.log(this.classification)
   }
 

@@ -1,20 +1,18 @@
 import Sprite from '../base/sprite'
+import DataBus from '../databus.js'
 
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
+let databus = new DataBus()
 
-const BG_IMG_SRC = `${wx.env.USER_DATA_PATH}/home_page.png`
+const BG_IMG = databus.images.home_page
 const BG_WIDTH = 512
 const BG_HEIGHT = 512
 
-let startBtn = new Image()
-startBtn.src = 'images/button/start.png'
-let rankBtn = new Image()
-rankBtn.src = 'images/button/rank.png'
-let difficult = new Image()
-difficult.src = 'images/button/mode-difficult.png'
-let normal = new Image()
-normal.src = 'images/button/mode-normal.png'
+let startBtn = databus.images.startBtn
+let rankBtn = databus.images.rankBtn
+let difficult = databus.images.difficult
+let normal = databus.images.normal
 let modeBtn = normal
 
 let atlas = new Image()
@@ -25,7 +23,7 @@ atlas.src = 'images/Common.png'
  */
 export default class BackGround extends Sprite {
   constructor(ctx) {
-    super(BG_IMG_SRC, BG_WIDTH, BG_HEIGHT)
+    super(BG_IMG, BG_WIDTH, BG_HEIGHT)
 
     this.startBtnArea = {}
     this.modeBtnArea = {}
