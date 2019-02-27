@@ -9,9 +9,10 @@ image.src = 'images/garbages/life.jpg'
 
 export default class GameInfo {
   constructor(gameMode) {
+    this.start = new Date()
     this.gameData = {
       mode: gameMode, 
-      startTime: (new Date()).toUTCString(),
+      startTime: this.start.toUTCString(),
       record: []
     }
   }

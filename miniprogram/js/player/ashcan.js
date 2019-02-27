@@ -9,18 +9,7 @@ const screenHeight = window.innerHeight
 // 玩家相关常量设置
 const DARK_CAN = databus.images.dark_can
 const NORMAL_CANS = databus.images.normal_cans
-// new Array(
-//   'images/garbages/normal/cans/dry_ashcan.png',
-//   'images/garbages/normal/cans/recyclable_ashcan.png',
-//   'images/garbages/normal/cans/wet_ashcan.png',
-//   'images/garbages/normal/cans/harmful_ashcan.png')
-const DIFFICULT_CANS = new Array(
-  'images/gabbages/difficult/cans/coarse_ashcan.png',
-  'images/gabbages/difficult/cans/combustible_ashcan.png',
-  'images/gabbages/difficult/cans/non-burnable_ashcan.png',
-  'images/gabbages/difficult/cans/plastic_packaging_ashcan.png',
-  'images/gabbages/difficult/cans/resource_ashcan.png'
-)
+const DIFFICULT_CANS = databus.images.difficult_cans
 
 const PLAYER_WIDTH = 25 * 2
 const PLAYER_HEIGHT = 63 * 2

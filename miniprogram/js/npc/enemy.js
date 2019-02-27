@@ -86,8 +86,6 @@ export default class Enemy extends Animation {
     let NUMBER = Math.floor(Math.random() * 
       gabbageSet[databus.mode][classification - 1].size)
     
-    // let ENEMY_IMG_SRC = 'images/garbages/' + modeString +
-    //   gabbageSet[databus.mode][classification - 1].name + '/' + NUMBER + '.png'
     let ENEMY_IMG = databus.images.gabbage[databus.mode][classification - 1][NUMBER]
 
     super(ENEMY_IMG, ENEMY_WIDTH, ENEMY_HEIGHT)

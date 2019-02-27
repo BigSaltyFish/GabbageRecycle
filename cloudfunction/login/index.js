@@ -33,16 +33,18 @@ exports.main = async (event, context) => {
     let rec = await doc.get()
     return {
       openid: event.userInfo.openId, 
-      score: rec.data[0].score
+      score: rec.data[0].score,
+      gameTime: rec.data[0].gameTime
     }
   } catch(error) {
     await col.add({
       data: {
         _openid: event.userInfo.openId, 
-        score: 0
+        score: 0,
+        gameTime: 0
       }
     })
-    await db.createCollection(`${event.userInfo.openid}-record`)
+    await db.createCollection(`${event.userInfo.openId}-record`)
     await db.collection(event.userInfo.openId + '-record').add({
       data: {
         _openid: event.userInfo.openId
@@ -50,7 +52,8 @@ exports.main = async (event, context) => {
     })
     return {
       openid: event.userInfo.openId, 
-      score: 0
+      score: 0,
+      gameTime: 0
     }
   }
 }

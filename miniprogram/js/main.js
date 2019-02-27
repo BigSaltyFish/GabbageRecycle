@@ -49,13 +49,16 @@ export default class Main {
       .catch(console.error)
   }
 
+  /**
+   * get the openid, record and the game time.
+   */
   login() {
-    // get openid
     wx.cloud.callFunction({
       name: 'login',
       success: res => {
         window.openid = res.result.openid
         this.personalHighScore = res.result.score
+        this.gameTime = res.result.gameTime
       },
       fail: err => {
         console.error('get openid failed with error', err)
@@ -125,63 +128,6 @@ export default class Main {
       // enemy.init(6)
       enemy.init(2, Math.floor(Math.random() * 4) + 1)
       databus.enemys.push(enemy)
-    }
-  }
-
-
-  // 全局碰撞检测
-  collisionDetection() {
-    let that = this
-
-    databus.bullets.forEach((bullet) => {
-      for (let i = 0, il = databus.enemys.length; i < il; i++) {
-        let enemy = databus.enemys[i]
-
-        if (!enemy.isPlaying && enemy.isCollideWith(bullet)) {
-          enemy.playAnimation()
-          that.music.playExplosion()
-
-          bullet.visible = false
-          databus.score += 1
-
-          break
-        }
-      }
-    })
-
-    for (let i = 0, il = databus.enemys.length; i < il; i++) {
-      let enemy = databus.enemys[i]
-
-      if (this.player.isCollideWith(enemy)) {
-        databus.gameOver = true
-
-        // 获取历史高分
-        if (this.personalHighScore) {
-          if (databus.score > this.personalHighScore) {
-            this.personalHighScore = databus.score
-          }
-        }
-
-        // 上传结果
-        // 调用 uploadScore 云函数
-        wx.cloud.callFunction({
-          name: 'uploadScore',
-          // data 字段的值为传入云函数的第一个参数 event
-          data: {
-            score: databus.score
-          },
-          success: res => {
-            if (this.prefetchHighScoreFailed) {
-              this.prefetchHighScore()
-            }
-          },
-          fail: err => {
-            console.error('upload score failed', err)
-          }
-        })
-
-        break
-      }
     }
   }
 
@@ -291,15 +237,19 @@ export default class Main {
             databus.gameOver = true
 
             let refresh = databus.score > that.personalHighScore
+            let end = new Date()
             that.gameinfo.gameData.score = databus.score
-            that.gameinfo.gameData.endTime = (new Date()).toUTCString()
+            that.gameinfo.gameData.endTime = end.toUTCString()
+            that.gameinfo.gameData.gameTime = end.getTime() - that.gameinfo.start.getTime()
             let tmp = that.gameinfo.gameData
+            let time = tmp.gameTime + that.gameTime
             wx.cloud.callFunction({
               name: 'upload',
               data: {
                 openid: window.openid,
                 breakRec: refresh,
-                record: tmp
+                record: tmp,
+                gameTime: time
               }
             })
 

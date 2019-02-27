@@ -36,6 +36,9 @@ export default class ImageManager {
     this.imageGet(this.normal_cans[3], 'cloud://classification-test-d20ada.636c-classification-test-d20ada/gabbages/normal/cans/harmful_ashcan.png', 'gabbages/normal/cans/harmful_ashcan.png')
     this.imageGet(this.dark_can, 'cloud://classification-test-d20ada.636c-classification-test-d20ada/gabbages/normal/cans/dark.png', 'gabbages/normal/cans/dark.png')
 
+    this.difficult_cans = new Array(5)
+    this.getImageList(this.difficult_cans, 'gabbages/difficult/cans/', '.jpg', ID)
+
     this.dry = new Array(5)
     this.getImageList(this.dry, 'gabbages/normal/dry/', '.png', ID)
 
