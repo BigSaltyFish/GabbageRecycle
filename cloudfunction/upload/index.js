@@ -10,14 +10,6 @@ const _ = db.command
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
 
-  wx.setUserCloudStorage({
-    KVDataList: {
-      "score": event.record.score
-    },
-    success: res => console.log(res),
-    fail: err => console.log(err)
-  })
-
   if(event.breakRec) {
     await db.collection('users').where({
       _openid: _.eq(event.openid)

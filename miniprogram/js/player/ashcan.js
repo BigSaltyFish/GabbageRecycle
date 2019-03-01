@@ -7,7 +7,7 @@ const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
 
 // 玩家相关常量设置
-const DARK_CAN = databus.images.dark_can
+let DARK_CAN = null
 const NORMAL_CANS = databus.images.normal_cans
 const DIFFICULT_CANS = databus.images.difficult_cans
 
@@ -22,21 +22,22 @@ export default class Ashcan {
       this.ashcans = new Array(4)
       this.canNumber = 4
       cans = NORMAL_CANS
+      DARK_CAN = databus.images.dark_can_normal
     }
     else if(gameMode == 1) {
       this.ashcans = new Array(5)
       this.canNumber = 5
       cans = DIFFICULT_CANS
+      DARK_CAN = databus.images.dark_can_difficult
     }
+    console.log(DARK_CAN)
+    console.log(databus.images)
 
     for(let i = 0; i < this.canNumber; i++) {
       this.ashcans[i] = new Sprite(cans[i], PLAYER_WIDTH, PLAYER_HEIGHT,
         (i + 1) * (screenWidth - 10) / (this.canNumber + 1) + 5 - PLAYER_WIDTH / 2, 
         screenHeight - PLAYER_HEIGHT - 30)
     }
-    // this.x1 = screenWidth / 4 - this.width / 2
-    // this.y1 = screenHeight - this.height - 30
-    
 
     // 玩家默认处于屏幕底部居中位置
 
@@ -161,38 +162,7 @@ export default class Ashcan {
       this.ashcans[i] = new Sprite(url, PLAYER_WIDTH, PLAYER_HEIGHT,
         x, y)
     }
-    // switch(number) {
-    //   case 0:
-    //     this.sprite1 = new Sprite(PLAYER_NORMAL_IMG_SRC1, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite2 = new Sprite(PLAYER_NORMAL_IMG_SRC2, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite3 = new Sprite(PLAYER_NORMAL_IMG_SRC3, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite4 = new Sprite(PLAYER_NORMAL_IMG_SRC4, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     break
-    //   case 1:
-    //     this.sprite1 = new Sprite(PLAYER_NORMAL_IMG_SRC1, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite2 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite3 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite4 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     break
-    //   case 2:
-    //     this.sprite1 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite2 = new Sprite(PLAYER_NORMAL_IMG_SRC2, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite3 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite4 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     break
-    //   case 3:
-    //     this.sprite1 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite2 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite3 = new Sprite(PLAYER_NORMAL_IMG_SRC3, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite4 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     break
-    //   case 4:
-    //     this.sprite1 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite2 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 3 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite3 = new Sprite(PLAYER_IMG_SRC5, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 5 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     this.sprite4 = new Sprite(PLAYER_NORMAL_IMG_SRC4, PLAYER_WIDTH, PLAYER_HEIGHT, (screenWidth * 7 / 8 - PLAYER_WIDTH / 2), (screenHeight - PLAYER_HEIGHT - 30))
-    //     break
-    // }
+    
   }
 
   /**
@@ -222,15 +192,6 @@ export default class Ashcan {
       }
     }
     return 0
-    // if (x > (screenWidth / 8 - PLAYER_WIDTH / 2) && x < (screenWidth / 8 + PLAYER_WIDTH / 2) && y < (screenHeight - 30) && y > (screenHeight - PLAYER_HEIGHT - 30)) {
-    //   return 1
-    // } else if (x > (screenWidth * 3 / 8 - PLAYER_WIDTH / 2) && x < (screenWidth * 3/ 8 + PLAYER_WIDTH / 2) && y < (screenHeight - 30) && y > (screenHeight - PLAYER_HEIGHT - 30)) {
-    //   return 2
-    // } else if (x > (screenWidth * 5 / 8 - PLAYER_WIDTH / 2) && x < (screenWidth * 5/ 8 + PLAYER_WIDTH / 2) && y < (screenHeight - 30) && y > (screenHeight - PLAYER_HEIGHT - 30)) {
-    //   return 3
-    // } else if (x > (screenWidth * 7 / 8 - PLAYER_WIDTH / 2) && x < (screenWidth * 7/ 8 + PLAYER_WIDTH / 2) && y < (screenHeight - 30) && y > (screenHeight - PLAYER_HEIGHT - 30)) {
-    //   return 4
-    // }
-    // return 0
+    
   }
 }

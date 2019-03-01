@@ -240,7 +240,8 @@ export default class Main {
             let end = new Date()
             that.gameinfo.gameData.score = databus.score
             that.gameinfo.gameData.endTime = end.toUTCString()
-            that.gameinfo.gameData.gameTime = end.getTime() - that.gameinfo.start.getTime()
+            that.gameinfo.gameData.gameTime = end.getTime() - 
+              that.gameinfo.start.getTime()
             let tmp = that.gameinfo.gameData
             let time = tmp.gameTime + that.gameTime
             wx.cloud.callFunction({
@@ -251,6 +252,13 @@ export default class Main {
                 record: tmp,
                 gameTime: time
               }
+            })
+            wx.setUserCloudStorage({
+              KVDataList: {
+                "score": tmp.score
+              },
+              success: res => console.log(res),
+              fail: err => console.log(err)
             })
 
           }else{
