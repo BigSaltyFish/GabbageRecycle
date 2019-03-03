@@ -14,18 +14,6 @@ export default class ImageManager {
     this.imageGet(this.tipImg, 'cloud://classification-test-d20ada.636c-classification-test-d20ada/tip.png', 'tip.png')
     this.imageGet(this.bg, 'cloud://classification-test-d20ada.636c-classification-test-d20ada/bg.jpg', 'bg.jpg')
 
-    this.startBtn = new Image()
-    this.rankBtn = new Image()
-    this.difficult = new Image()
-    this.normal = new Image()
-
-    this.imageGet(this.startBtn,
-      'cloud://classification-test-d20ada.636c-classification-test-d20ada/button/start.png', 'button/start.png')
-    this.imageGet(this.rankBtn,
-      'cloud://classification-test-d20ada.636c-classification-test-d20ada/button/rank.png', 'button/rank.png')
-    this.imageGet(this.difficult, 'cloud://classification-test-d20ada.636c-classification-test-d20ada/button/mode-difficult.png', 'button/mode-difficult.png')
-    this.imageGet(this.normal, 'cloud://classification-test-d20ada.636c-classification-test-d20ada/button/mode-normal.png', 'button/mode-normal.png')
-
     this.normal_cans = new Array(4)
     this.getImageList(this.normal_cans, 'gabbages/normal/cans/', '.png', ID)
     this.dark_can_normal = new Image()
@@ -118,7 +106,10 @@ export default class ImageManager {
               }
             })
           },
-          fail: err => console.log(err)
+          fail: err => {
+            console.log(err)
+            console.log('fail to fetch'+fileID)
+          }
         })
       }
     })

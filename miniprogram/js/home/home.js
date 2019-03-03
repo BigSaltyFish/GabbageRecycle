@@ -5,18 +5,18 @@ const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
 let databus = new DataBus()
 
-const BG_IMG = databus.images.home_page
-const BG_WIDTH = 512
-const BG_HEIGHT = 512
+const BG_IMG = new Image()
+BG_IMG.src = 'images/start/bg.png'
+const BG_WIDTH = 330
+const BG_HEIGHT = 586
 
-let startBtn = databus.images.startBtn
-let rankBtn = databus.images.rankBtn
-let difficult = databus.images.difficult
-let normal = databus.images.normal
-let modeBtn = normal
+let modeBtn = new Image()
+modeBtn.src = 'images/start/mode.png'
+let infoBtn = new Image()
+infoBtn.src = 'images/start/info.png'
+let settingBtn = new Image()
+settingBtn.src = 'images/start/setting.png'
 
-let atlas = new Image()
-atlas.src = 'images/Common.png'
 /**
  * 游戏背景类
  * 提供update和render函数实现无限滚动的背景功能
@@ -25,9 +25,9 @@ export default class BackGround extends Sprite {
   constructor(ctx) {
     super(BG_IMG, BG_WIDTH, BG_HEIGHT)
 
-    this.startBtnArea = {}
     this.modeBtnArea = {}
-    this.rankBtnArea = {}
+    this.infoBtnArea = {}
+    this.settingBtnArea = {}
 
     this.top = 0
 
@@ -76,82 +76,45 @@ export default class BackGround extends Sprite {
    * 第二张补全除了top高度之外的部分，其余的隐藏在屏幕下面
    */
   render(ctx) {
-    // ctx.drawImage(
-    //   this.img,
-    //   0,
-    //   0,
-    //   this.width,
-    //   this.height,
-    //   0,
-    //   -screenHeight + this.top,
-    //   screenWidth,
-    //   screenHeight
-    // )
-
     ctx.drawImage(
-      this.img,
-      145,
+      BG_IMG,
       0,
-      screenWidth,
-      screenHeight,
+      0,
+      BG_IMG.width,
+      BG_IMG.height,
       0,
       this.top,
       screenWidth,
       screenHeight
     )
 
-    // ctx.drawImage(atlas, 0, 0, 119, 108, screenWidth / 2 - 150, screenHeight / 2 - 100, 300, 300)
-    // ctx.drawImage(
-    //   atlas,
-    //   120, 6, 39, 24,
-    //   screenWidth / 2 - 60,
-    //   screenHeight / 2 - 100 + 180,
-    //   120, 40
-    // )
-
-    this.imgLoad(ctx,
-      startBtn,
-      0,
-      '开始游戏', 
-      this.startBtnArea)
     this.imgLoad(ctx,
       modeBtn,
-      1,
-      '难度：普通', 
+      0,
       this.modeBtnArea)
     this.imgLoad(ctx,
-      rankBtn,
+      infoBtn,
+      1,
+      this.infoBtnArea)
+    this.imgLoad(ctx,
+      settingBtn,
       2,
-      '查看排名', 
-      this.rankBtnArea)
-
-    // ctx.fillText(
-    //   '开始游戏',
-    //   screenWidth / 2 - 40,
-    //   screenHeight / 2 - 100 + 205
-    // )
-    // this.btnArea = {
-    //   startX: screenWidth / 2 - 40,
-    //   startY: screenHeight / 2 - 100 + 180,
-    //   endX: screenWidth / 2 + 50,
-    //   endY: screenHeight / 2 - 100 + 255
-    // }
+      this.settingBtnArea)
   }
 
   /**
    * used to load picture, locate the picture according to num.
-   * @param ctx the rendering context
    * @param url the url of the picture
    * @param area the button area, used to response the touch
    */
-  imgLoad(ctx, img, num, text, area) {
+  imgLoad(ctx, img, num, area) {
     this.renderBtn(ctx, img,
       (screenWidth - 10) / 2 + 5 - img.width / 2,
-      (screenHeight - 10) * (8 + num) / 12 - img.height / 2)
-      area.startX = (screenWidth - 10) / 2 + 5 - img.width / 2
-      area.startY = (screenHeight - 10) * (8 + num) / 12 - img.height / 2
-      area.endX = (screenWidth - 10) / 2 + 5 + img.width / 2
-      area.endY = (screenHeight - 10) * (8 + num) / 12 + img.height / 2
+      screenHeight * (2 + num) / 6 - img.height / 2)
+    area.startX = (screenWidth - 10) / 2 + 5 - img.width / 2
+    area.startY = screenHeight * (2 + num) / 6 - img.height / 2
+    area.endX = (screenWidth - 10) / 2 + 5 + img.width / 2
+    area.endY = screenHeight * (2 + num) / 6 + img.height / 2
   }
 
   /**

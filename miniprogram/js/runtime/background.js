@@ -15,6 +15,7 @@ const BG_HEIGHT    = 512
  */
 export default class BackGround extends Sprite {
   constructor(ctx) {
+    debugger;
     super(BG_IMG, BG_WIDTH, BG_HEIGHT)
 
     this.top = 0

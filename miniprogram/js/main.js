@@ -9,11 +9,29 @@ import HOME from './home/home'
 let ctx = canvas.getContext('2d')
 let databus = new DataBus()
 let background = databus.images.home_page
-let introPage = databus.images.introPage
 let tipImg = databus.images.tipImg
 
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
+
+let intro_bottom = new Image()
+intro_bottom.src = 'images/intro/underLayer.png'
+let logo = new Image()
+logo.src = 'images/intro/logo.png'
+let earth = new Image()
+earth.src = 'images/intro/earth.png'
+let introBtn = new Image()
+introBtn.src = 'images/intro/start.png'
+let introText = new Image()
+introText.src = 'images/intro/introduction.png'
+// these are for the button in introduction
+let introBtnX = 0
+let introBtnY = 0
+let rad = 0
+
+
+let startbg = new Image()
+startbg.src = 'images/start/bg.png'
 
 wx.cloud.init()
 const db = wx.cloud.database({
@@ -301,10 +319,44 @@ export default class Main {
    * render the introduction page
    */
   intro_render() {
-    ctx.drawImage(introPage, 
+    ctx.drawImage(intro_bottom, 
     0, 0, 
-    introPage.width, introPage.height, 
+    intro_bottom.width, intro_bottom.height, 
     0, 0, screenWidth, screenHeight)
+
+    ctx.drawImage(
+      logo,
+      screenWidth/2 - logo.width/2, screenHeight/19,
+      logo.width, logo.height
+    )
+
+    ctx.drawImage(
+      earth,
+      screenWidth/2 - earth.width/2, 22*screenHeight/100, 
+      earth.width, earth.height
+    )
+    //this is the center of the start button
+    introBtnX = screenWidth / 2 + earth.width / 2
+    introBtnY = 22 * screenHeight / 100 + earth.height
+    rad = introBtn.width / 2
+    ctx.drawImage(
+      introBtn,
+      introBtnX - introBtn.width/2, introBtnY - introBtn.height/2,
+      introBtn.width, introBtn.height
+    )
+    // ctx.font = "18px bold 黑体"
+    // ctx.fillStyle = "black"
+    // ctx.textAlign = "left"
+    // ctx.textBaseline = "middle"
+    // ctx.fillText("以上海为例，政府确立目标在2020年，上海生活垃圾综合处理能力要达到3.28万吨/日心上，而目前上海的实际垃圾处理能力公2万多吨/日。垃圾的不正确放置导致了资源的低效利用，那我们又该如何正确进行垃圾分类呢？", screenWidth/5, y+introBtn.height/2 + 5)
+
+    ctx.drawImage(
+      introText,
+      0, 0,
+      introText.width, introText.height,
+      screenWidth / 20, introBtnY + introBtn.height / 2 + 5,
+      9 * screenWidth / 10, (9 * screenWidth / 10)*(introText.height/introText.width)
+    )
   }
 
   /**
@@ -360,12 +412,25 @@ export default class Main {
   }
 
   /**
-   * the touch handler in the introduction page, start the game when touched
+   * the touch handler in the introduction page, 
+   * start the game when pressed the button.
    * @param {object} e: the touch event
    */
   introTouch(e) {
     e.preventDefault()
-    this.home()
+    let x = e.touches[0].clientX
+    let y = e.touches[0].clientY
+
+    if(this.distance(x, introBtnX, y, introBtnY) <= rad*rad){
+      this.home()
+    }
+  }
+
+  /**
+   * compute the distance of the points.
+   */
+  distance(x1, x2, y1, y2) {
+    return (x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)
   }
 
 
