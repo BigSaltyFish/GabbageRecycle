@@ -6,6 +6,7 @@ import Music from './runtime/music'
 import DataBus from './databus'
 import Ashcan from './player/ashcan'
 import HOME from './home/home'
+import Button from './display/button.js'
 let ctx = canvas.getContext('2d')
 let databus = new DataBus()
 let background = databus.images.home_page
@@ -20,15 +21,22 @@ let logo = new Image()
 logo.src = 'images/intro/logo.png'
 let earth = new Image()
 earth.src = 'images/intro/earth.png'
-let introBtn = new Image()
-introBtn.src = 'images/intro/start.png'
+let introBtn = new Button(null, 'images/intro/start.png')
+
 let introText = new Image()
 introText.src = 'images/intro/introduction.png'
+
 // these are for the button in introduction
-let introBtnX = 0
-let introBtnY = 0
 let rad = 0
 
+/**
+   * calculating the zoom rate by the index.
+   * @param {number} index: the index of the animation, from 0 to 10.
+   * @return {number}: the zoom rate.
+   */
+const zoom = (index) => {
+  return (4 * (index * index) / 25 - 8 * index / 5 + 10) / 10
+}
 
 let startbg = new Image()
 startbg.src = 'images/start/bg.png'
@@ -50,6 +58,7 @@ export default class Main {
     databus.mode = 0
     // display the introduction page
     this.pause(this.introTouch, this.intro_render)
+    introBtn.beginAnimation(true, zoom, 0, 0)
     this.login()
   }
 
@@ -319,6 +328,15 @@ export default class Main {
    * render the introduction page
    */
   intro_render() {
+    ctx.clearRect(0, 0, screenWidth, screenHeight)
+
+    // ctx.drawImage(
+    //   testImg,
+    //   0, 0,
+    //   testImg.width, testImg.height,
+    //   0, 0,
+    //   screenWidth, screenHeight
+    // )
     ctx.drawImage(intro_bottom, 
     0, 0, 
     intro_bottom.width, intro_bottom.height, 
@@ -336,27 +354,31 @@ export default class Main {
       earth.width, earth.height
     )
     //this is the center of the start button
-    introBtnX = screenWidth / 2 + earth.width / 2
-    introBtnY = 22 * screenHeight / 100 + earth.height
-    rad = introBtn.width / 2
-    ctx.drawImage(
-      introBtn,
-      introBtnX - introBtn.width/2, introBtnY - introBtn.height/2,
-      introBtn.width, introBtn.height
+    introBtn.x = screenWidth / 2 + earth.width / 2 - introBtn.img.width/2
+    introBtn.y = 22 * screenHeight / 100 + earth.height - introBtn.img.height/2
+    rad = introBtn.img.width / 2
+    introBtn.drawOn(
+      ctx, 
+      0, 0, 
+      introBtn.img.width, introBtn.img.height, 
+      introBtn.x, introBtn.y,
+      introBtn.img.width, introBtn.img.height
     )
-    // ctx.font = "18px bold 黑体"
-    // ctx.fillStyle = "black"
-    // ctx.textAlign = "left"
-    // ctx.textBaseline = "middle"
-    // ctx.fillText("以上海为例，政府确立目标在2020年，上海生活垃圾综合处理能力要达到3.28万吨/日心上，而目前上海的实际垃圾处理能力公2万多吨/日。垃圾的不正确放置导致了资源的低效利用，那我们又该如何正确进行垃圾分类呢？", screenWidth/5, y+introBtn.height/2 + 5)
 
     ctx.drawImage(
       introText,
       0, 0,
       introText.width, introText.height,
-      screenWidth / 20, introBtnY + introBtn.height / 2 + 5,
+      screenWidth / 20, introBtn.y + introBtn.img.height + 5,
       9 * screenWidth / 10, (9 * screenWidth / 10)*(introText.height/introText.width)
     )
+
+    //play the animations
+    databus.animations.forEach((ani) => {
+      if(ani.isPlaying) {
+        ani.aniZoom(ctx)
+      }
+    })
   }
 
   /**
@@ -367,40 +389,122 @@ export default class Main {
    */
   game_start(e) {
     e.preventDefault()
-
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
-
-    area = this.bg.modeBtnArea
-
-    if (x >= area.startX &&
-      x <= area.endX &&
-      y >= area.startY &&
-      y <= area.endY) {
-      this.changeMode()
-      return;
-    }
-
-    area = this.bg.rankBtnArea
+    
+    let area = this.bg.modeBtnArea
 
     if (x >= area.startX &&
       x <= area.endX &&
       y >= area.startY &&
       y <= area.endY) {
-      console.log('rank!')
+        this.bg.modeBtn.onClick(() => {
+          if(!this.bg.modePoped) {
+            // do not change the sequence
+            this.bg.showMode(this)
+            this.bg.modePoped = true
+          }
+        }, zoom)
       return;
     }
 
-    let area = this.bg.startBtnArea
+    area = this.bg.infoBtnArea
 
     if (x >= area.startX &&
       x <= area.endX &&
       y >= area.startY &&
       y <= area.endY) {
-      this.pause(this.tipTouch, this.tip_render)
+        this.bg.infoBtn.onClick(() => {
+          console.log('rank!')
+        }, zoom)
       return;
     }
 
+    area = this.bg.settingBtnArea
+
+    if (x >= area.startX &&
+      x <= area.endX &&
+      y >= area.startY &&
+      y <= area.endY) {
+        this.bg.settingBtn.onClick(() => {
+          if(!this.settingPoped){
+            this.bg.showSetting(this)
+            this.bg.settingPoped = true
+          }
+        }, zoom)
+      // this.pause(this.tipTouch, this.tip_render)
+      return;
+    }
+
+    let button = this.bg.normalModeBtn
+    area = {
+      startX: button.x,
+      startY: button.y,
+      endX: button.x + button.img.width,
+      endY: button.y + button.img.height
+    }
+    if (x >= area.startX &&
+      x <= area.endX &&
+      y >= area.startY &&
+      y <= area.endY) {
+        button.onClick(() => {
+          databus.gameMode = 0
+          this.pause(this.tipTouch, this.tip_render)
+        }, zoom)
+        return;
+      }
+
+    button = this.bg.difficultModeBtn
+    area = {
+      startX: button.x,
+      startY: button.y,
+      endX: button.x + button.img.width,
+      endY: button.y + button.img.height
+    }
+    if (x >= area.startX &&
+      x <= area.endX &&
+      y >= area.startY &&
+      y <= area.endY) {
+      button.onClick(() => {
+        databus.gameMode = 1
+        this.pause(this.tipTouch, this.tip_render)
+      }, zoom)
+      return;
+    }
+
+    button = this.bg.bgmBtn
+    area = {
+      startX: button.x,
+      startY: button.y,
+      endX: button.x + button.img.width,
+      endY: button.y + button.img.height
+    }
+    if (x >= area.startX &&
+      x <= area.endX &&
+      y >= area.startY &&
+      y <= area.endY) {
+      button.onClick(() => {
+        console.log('bgm!')
+      }, zoom)
+      return;
+    }
+
+    button = this.bg.soundBtn
+    area = {
+      startX: button.x,
+      startY: button.y,
+      endX: button.x + button.img.width,
+      endY: button.y + button.img.height
+    }
+    if (x >= area.startX &&
+      x <= area.endX &&
+      y >= area.startY &&
+      y <= area.endY) {
+      button.onClick(() => {
+        console.log('sound!')
+      }, zoom)
+      return;
+    }
   }
 
   /**
@@ -421,8 +525,8 @@ export default class Main {
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
 
-    if(this.distance(x, introBtnX, y, introBtnY) <= rad*rad){
-      this.home()
+    if(this.distance(x, introBtn.x + introBtn.img.width/2, y, introBtn.y + introBtn.img.height/2) <= rad*rad){
+      introBtn.onClick(() => this.home(), zoom)
     }
   }
 
@@ -459,6 +563,12 @@ export default class Main {
     ctx.clearRect(0, 0, screenWidth, screenHeight)
 
     this.bg.render(ctx)
+
+    databus.animations.forEach((ani) => {
+      if (ani.isPlaying) {
+        ani.aniZoom(ctx)
+      }
+    })
   }
   home_loop() {
     this.home_render()
@@ -473,26 +583,31 @@ export default class Main {
    * @param {number} gameMode: 0 for normal and 1 for difficult
    */
   tip_render(gameMode) {
-    // this.bg.bgRender(ctx)
+    let img
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+    img = databus.images.tip
     ctx.drawImage(
-      background,
-      145,
-      0,
-      screenWidth,
-      screenHeight,
-      0,
-      0,
-      screenWidth,
-      screenHeight
+      img, 
+      0, 0, img.width, img.height,
+      0, 0, screenWidth, screenHeight
     )
 
+    img = databus.images.tipText
     ctx.drawImage(
-      tipImg,
-      0, 0, 
-      tipImg.width, tipImg.height, 
-      screenWidth / 6, screenHeight / 2 - screenWidth / 3, 
-      4 * screenWidth / 6, 2 * screenWidth / 3)
+      img,
+      0, 0, img.width, img.height,
+      0, screenHeight/5,
+      screenWidth, 7*screenHeight/10
+    )
+
+    img = databus.images.stars
+    ctx.drawImage(
+      img,
+      0, 0, img.width, img.height,
+      screenWidth - img.width, screenHeight - img.height,
+      img.width, img.height
+    )
+
   }
 
   /**

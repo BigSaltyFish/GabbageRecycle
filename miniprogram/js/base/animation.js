@@ -2,6 +2,14 @@ import Sprite  from './sprite'
 import DataBus from '../databus'
 
 let databus = new DataBus()
+// delete an element from an array
+const del = (arr, val) => {
+  for(let i = 0; i < arr.length; i++) {
+    if(arr[i] === val){
+      arr.splice(i, 1)
+    }
+  }
+}
 
 const __ = {
   timer: Symbol('timer'),
@@ -35,11 +43,14 @@ export default class Animation extends Sprite {
     // 帧图片集合
     this.imgList = []
 
+    // the event handler if exist
+    this.handler = null
+
     /**
      * 推入到全局动画池里面
      * 便于全局绘图的时候遍历和绘制当前动画帧
      */
-    databus.animations.push(this)
+    // databus.animations.push(this)
   }
 
   /**
@@ -57,6 +68,22 @@ export default class Animation extends Sprite {
     this.count = imgList.length
   }
 
+  /**
+   * init the zoom animation
+   * @param {number} count: the frame number.
+   * @param {function} handler: the touch event handler.
+   */
+  initZoom(count, handler, move, zoom_x = 0, zoom_y = 0) {
+    this.imgList.push(this.img)
+    this.count = count
+    this.handler = handler
+    this.zoom = move
+
+    this.zoom_x = zoom_x
+    this.zoom_y = zoom_y
+
+  }
+
   // 将播放中的帧绘制到canvas上
   aniRender(ctx) {
     ctx.drawImage(
@@ -68,8 +95,30 @@ export default class Animation extends Sprite {
     )
   }
 
+  /** 
+   * this animation is specially made for the buttons
+   * it can zoom it according the passing function and move it lineaily.
+   * @param {Context} ctx: the drawing context.
+   */
+  aniZoom(ctx) {
+    let k = this.zoom(10*(this.index + 1)/this.count)
+    let img = this.imgList[0]
+
+    this.x += this.zoom_x / this.count
+    this.y += this.zoom_y / this.count
+
+    ctx.drawImage(
+      img,
+      this.center_x - k * img.width/2,
+      this.center_y - k * img.height/2,
+      k * img.width,
+      k * img.height
+    )
+  }
+
   // 播放预定的帧动画
   playAnimation(index = 0, loop = false) {
+    databus.animations.push(this)
     // 动画播放的时候精灵图不再展示，播放帧动画的具体帧
     this.visible   = false
 
@@ -89,9 +138,12 @@ export default class Animation extends Sprite {
   // 停止帧动画播放
   stop() {
     this.isPlaying = false
+    del(databus.animations, this)
 
     if ( this[__.timer] )
       clearInterval(this[__.timer])
+
+    if(this.handler != null) this.handler()
   }
 
   // 帧遍历

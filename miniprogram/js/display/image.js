@@ -1,18 +1,15 @@
 const fs = wx.getFileSystemManager()
-wx.cloud.init()
+// wx.cloud.init()
 const ID = 'cloud://classification-test-d20ada.636c-classification-test-d20ada/'
 
 export default class ImageManager {
   constructor() {
-    this.introPage = new Image()
-    this.tipImg = new Image()
-    this.home_page = new Image()
-    this.bg = new Image()
-
-    this.imageGet(this.introPage, 'cloud://classification-test-d20ada.636c-classification-test-d20ada/intro.jpg', 'intro.jpg')
-    this.imageGet(this.home_page, 'cloud://classification-test-d20ada.636c-classification-test-d20ada/home_page.png', 'home_page.png')
-    this.imageGet(this.tipImg, 'cloud://classification-test-d20ada.636c-classification-test-d20ada/tip.png', 'tip.png')
-    this.imageGet(this.bg, 'cloud://classification-test-d20ada.636c-classification-test-d20ada/bg.jpg', 'bg.jpg')
+    this.tip = new Image()
+    this.imageGet(this.tip, ID + 'tip.png', 'tip.png')
+    this.stars = new Image()
+    this.imageGet(this.stars, ID + 'stars.png', 'stars.png')
+    this.tipText = new Image()
+    this.imageGet(this.tipText, ID + 'tipText.png', 'tipText.png')
 
     this.normal_cans = new Array(4)
     this.getImageList(this.normal_cans, 'gabbages/normal/cans/', '.png', ID)

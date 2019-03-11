@@ -1,5 +1,5 @@
 import Pool from './base/pool'
-import ImageManager from './image.js'
+import ImageManager from 'display/image.js'
 
 let instance
 

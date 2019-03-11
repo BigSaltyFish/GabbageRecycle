@@ -1,5 +1,6 @@
 import Sprite from '../base/sprite'
 import DataBus from '../databus.js'
+import Button from '../display/button.js'
 
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
@@ -10,13 +11,6 @@ BG_IMG.src = 'images/start/bg.png'
 const BG_WIDTH = 330
 const BG_HEIGHT = 586
 
-let modeBtn = new Image()
-modeBtn.src = 'images/start/mode.png'
-let infoBtn = new Image()
-infoBtn.src = 'images/start/info.png'
-let settingBtn = new Image()
-settingBtn.src = 'images/start/setting.png'
-
 /**
  * 游戏背景类
  * 提供update和render函数实现无限滚动的背景功能
@@ -25,9 +19,16 @@ export default class BackGround extends Sprite {
   constructor(ctx) {
     super(BG_IMG, BG_WIDTH, BG_HEIGHT)
 
+    this.modeBtn = new Button(null, 'images/start/mode.png')
+    this.infoBtn = new Button(null, 'images/start/info.png')
+    this.settingBtn = new Button(null, 'images/start/setting.png')
+
     this.modeBtnArea = {}
     this.infoBtnArea = {}
     this.settingBtnArea = {}
+
+    this.modePoped = false
+    this.settingPoped = false
 
     this.top = 0
 
@@ -43,30 +44,25 @@ export default class BackGround extends Sprite {
     console.log('changed!')
   }
 
-  // update() {
-  //   this.top += 2
-
-  //   if (this.top >= screenHeight)
-  //     this.top = 0
-  // }
-
   /**
-   * this function is for the tip render
-   * it only renders the background image
-   * @param {object} ctx: the rendering context
+   * show the buttons for the two mode.
    */
-  bgRender(ctx) {
-    ctx.drawImage(
-      this.img,
-      145,
-      0,
-      screenWidth,
-      screenHeight,
-      0,
-      this.top,
-      screenWidth,
-      screenHeight
-    )
+  showMode(main) {
+    const zoom = (x) => {return x*x/100}
+    this.normalModeBtn = new Button(null, 'images/start/normal.png', screenWidth/2, screenHeight/3)
+    this.difficultModeBtn = new Button(null, 'images/start/difficult.png', screenWidth/2, screenHeight/3)
+
+    this.normalModeBtn.onClick(null, zoom, -screenWidth / 4, -screenHeight/6)
+    this.difficultModeBtn.onClick(null, zoom, screenWidth / 4, -screenHeight / 6)
+  }
+
+  showSetting(main) {
+    const zoom = (x) => { return x * x / 100 }
+    this.bgmBtn = new Button(null, 'images/start/bgm.png', screenWidth/2, 2*screenHeight/3)
+    this.soundBtn = new Button(null, 'images/start/sound.png', screenWidth/2, 2*screenHeight/3)
+
+    this.bgmBtn.onClick(null, zoom, -screenWidth/4, screenHeight/6)
+    this.soundBtn.onClick(null, zoom, screenWidth/4, screenHeight/6)
   }
 
   /**
@@ -88,33 +84,85 @@ export default class BackGround extends Sprite {
       screenHeight
     )
 
-    this.imgLoad(ctx,
-      modeBtn,
+    if(this.modePoped) {
+      if(!this.normalModeBtn.isPlaying) {
+        let button = this.normalModeBtn.img
+        this.normalModeBtn.drawOn(
+          ctx,
+          0, 0, button.width, button.height,
+          screenWidth/4 - button.width/2,
+          screenHeight/6 - button.height/2, 
+          button.width, button.height
+        )
+      }
+      if(!this.difficultModeBtn.isPlaying) {
+        let button = this.difficultModeBtn.img
+        this.difficultModeBtn.drawOn(
+          ctx,
+          0, 0, button.width, button.height,
+          3*screenWidth / 4 - button.width / 2,
+          screenHeight / 6 - button.height/2,
+          button.width, button.height
+        )
+      }
+    }
+
+    if(this.settingPoped) {
+      if (!this.bgmBtn.isPlaying) {
+        let button = this.bgmBtn.img
+        this.bgmBtn.drawOn(
+          ctx,
+          0, 0, button.width, button.height,
+          screenWidth / 4 - button.width / 2,
+          5 * screenHeight / 6 - button.height / 2,
+          button.width, button.height
+        )
+      }
+      if (!this.soundBtn.isPlaying) {
+        let button = this.soundBtn.img
+        this.soundBtn.drawOn(
+          ctx,
+          0, 0, button.width, button.height,
+          3 * screenWidth / 4 - button.width / 2,
+          5* screenHeight / 6 - button.height / 2,
+          button.width, button.height
+        )
+      }
+    }
+
+    this.buttonLoad(ctx,
+      this.modeBtn,
       0,
       this.modeBtnArea)
-    this.imgLoad(ctx,
-      infoBtn,
+    this.buttonLoad(ctx,
+      this.infoBtn,
       1,
       this.infoBtnArea)
-    this.imgLoad(ctx,
-      settingBtn,
+    this.buttonLoad(ctx,
+      this.settingBtn,
       2,
       this.settingBtnArea)
   }
 
   /**
-   * used to load picture, locate the picture according to num.
-   * @param url the url of the picture
+   * used to load a button, locate the button according to num.
+   * @param button the url of the picture
    * @param area the button area, used to response the touch
    */
-  imgLoad(ctx, img, num, area) {
-    this.renderBtn(ctx, img,
-      (screenWidth - 10) / 2 + 5 - img.width / 2,
-      screenHeight * (2 + num) / 6 - img.height / 2)
-    area.startX = (screenWidth - 10) / 2 + 5 - img.width / 2
-    area.startY = screenHeight * (2 + num) / 6 - img.height / 2
-    area.endX = (screenWidth - 10) / 2 + 5 + img.width / 2
-    area.endY = screenHeight * (2 + num) / 6 + img.height / 2
+  buttonLoad(ctx, button, num, area) {
+    button.drawOn(
+      ctx,
+      0, 0,
+      button.img.width, button.img.height,
+      (screenWidth - 10) / 2 + 5 - button.img.width / 2,
+      screenHeight * (2 + num) / 6 - button.img.height / 2,
+      button.img.width, button.img.height
+    )
+    
+    area.startX = (screenWidth - 10) / 2 + 5 - button.img.width / 2
+    area.startY = screenHeight * (2 + num) / 6 - button.img.height / 2
+    area.endX = (screenWidth - 10) / 2 + 5 + button.img.width / 2
+    area.endY = screenHeight * (2 + num) / 6 + button.img.height / 2
   }
 
   /**
