@@ -46,6 +46,9 @@ export default class Animation extends Sprite {
     // the event handler if exist
     this.handler = null
 
+    // the time to call the handler
+    this.handleFrame = 0
+
     /**
      * 推入到全局动画池里面
      * 便于全局绘图的时候遍历和绘制当前动画帧
@@ -73,10 +76,11 @@ export default class Animation extends Sprite {
    * @param {number} count: the frame number.
    * @param {function} handler: the touch event handler.
    */
-  initZoom(count, handler, move, zoom_x = 0, zoom_y = 0) {
+  initZoom(count, handler, handleFrame, move, zoom_x = 0, zoom_y = 0) {
     this.imgList.push(this.img)
     this.count = count
     this.handler = handler
+    this.handleFrame = handleFrame
     this.zoom = move
 
     this.zoom_x = zoom_x
@@ -142,13 +146,13 @@ export default class Animation extends Sprite {
 
     if ( this[__.timer] )
       clearInterval(this[__.timer])
-
-    if(this.handler != null) this.handler()
   }
 
   // 帧遍历
   frameLoop() {
     this.index++
+
+    if(this.index == this.handleFrame && this.handler != null) this.handler()
 
     if ( this.index > this.count - 1 ) {
       if ( this.loop ) {

@@ -42,14 +42,14 @@ export default class Button extends Animation {
    * and undertake the event handler
    * @param {function} handler: the handler of the touch event.
    */
-  onClick(handler, move, zoom_x = 0, zoom_y = 0) {
+  onClick(handler, move, handleFrame = 11, zoom_x = 0, zoom_y = 0) {
     this.stop()
-    this.initZoom(11, handler,  move, zoom_x, zoom_y)
+    this.initZoom(11, handler, handleFrame, move, zoom_x, zoom_y)
     this.playAnimation()
   }
 
   beginAnimation(isLoop, move, zoom_x = 0, zoom_y = 0) {
-    this.initZoom(100, null, move, zoom_x, zoom_y)
+    this.initZoom(100, null, 0, move, zoom_x, zoom_y)
     this.playAnimation(0, isLoop)
   }
 }

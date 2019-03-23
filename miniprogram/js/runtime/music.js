@@ -46,7 +46,8 @@ export default class Music {
     }
   }
 
-  playStop() {
-    this.bgmAudio.pause()
+  playFlip(onPlay) {
+    if(onPlay) this.bgmAudio.play()
+    else this.bgmAudio.pause()
   }
 }

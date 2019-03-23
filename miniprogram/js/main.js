@@ -84,7 +84,7 @@ export default class Main {
     this.music.playBgm()
 
     introBtn.beginAnimation(true, zoom, 0, 0)
-    
+
     this.login()
   }
 
@@ -456,7 +456,7 @@ export default class Main {
       y <= area.endY) {
       this.music.playTouch()
       this.bg.settingBtn.onClick(() => {
-        if(!this.settingPoped){
+        if(!this.bg.settingPoped){
           this.bg.showSetting(this)
           this.bg.settingPoped = true
         }
@@ -519,6 +519,7 @@ export default class Main {
         this.music.playTouch()
         button.onClick(() => {
           databus.music = !databus.music
+          this.music.playFlip(databus.music)
         }, zoom)
         return;
       }
