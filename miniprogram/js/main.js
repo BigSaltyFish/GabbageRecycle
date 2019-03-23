@@ -65,19 +65,26 @@ export default class Main {
   constructor() {
     // 维护当前requestAnimationFrame的id
     this.aniId = 0
+
     this.personalHighScore = null
+
     // 0 present the normal and 1 present the difficult
     databus.mode = 0
+
     // display the introduction page
     this.pause(this.introTouch, this.intro_render)
-    console.log(`main:${screenWidth}:${screenHeight}`)
+
+    // render the shared canvas
     openDataContext.postMessage({
       option: 'initialize',
       size: [screenWidth, screenHeight]
     })
+
     this.music = new Music()
     this.music.playBgm()
+
     introBtn.beginAnimation(true, zoom, 0, 0)
+    
     this.login()
   }
 

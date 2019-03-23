@@ -3,8 +3,17 @@ const ctx = sharedCanvas.getContext('2d')
 let screenWidth = sharedCanvas.width
 let screenHeight = sharedCanvas.height
 
+// stores the scores and avatars
 let friendData
 
+/*
+ * listen to the messages from the main field.
+ * update for the score of the user has update, say him or her has broke
+ * the record, so the score list has to be refetch immediately.
+ * initialize for getting the size of the screen and paint the page. It will be 
+ * called immediately the game starts, so when the rank button is clicked, the 
+ * shared canvas won't be empty.
+ */
 wx.onMessage(data => {
   if(data.option == 'update') {
     wx.getFriendCloudStorage({
@@ -19,7 +28,6 @@ wx.onMessage(data => {
   if(data.option == 'initialize') {
     screenWidth = data.size[0]
     screenHeight = data.size[1]
-    console.log(`index:${screenWidth}:${screenHeight}`)
     wx.getFriendCloudStorage({
       keyList: ['score'],
       success: res => {
@@ -33,19 +41,12 @@ wx.onMessage(data => {
   
 })
 
-function* getAvatar(avatarList) {
-  for(let i = 0; i < 6; i++) {
-    if(i == friendData.length) break
-    yield new Promise((resolve, reject) => {
-      let ava = wx.createImage()
-      ava.src = friendData[i].avatarUrl
-      avatarList.push(ava)
-      ava.onload = () => resolve(avatarList)
-    })
-  }
-  return null
-}
-
+/**
+ * the function to draw the entire page. all elements are drew only once,
+ * instead of the repeat drawing in the main field. es7 is not supported here,
+ * so async, await was not used here. Generator is not supported, too. use Promises
+ * to ensure the valid render. Show up to six users.
+ */
 function drawRankList(data) {
   new Promise((resolve, reject) => {
     let rankBg = wx.createImage()
@@ -88,18 +89,32 @@ function drawRankList(data) {
       return parseInt(b.KVDataList[0].value) - parseInt(a.KVDataList[0].value)
     })
     let promise, avatarList = [box, photo]
-    promise = getAvatar(avatarList)
-    while(true) {
-      let tmp = getAvatar(avatarList)
-      if (tmp === null) break
-      promise = promise.then(list => {
-        return getAvatar(list)
-      })
+    for (let i = 0; i < 6; i++) {
+      if (i == friendData.length) break
+      if(i == 0){
+        promise = new Promise((resolve, reject) => {
+          let ava = wx.createImage()
+          ava.src = friendData[i].avatarUrl
+          avatarList.push(ava)
+          ava.onload = () => resolve(avatarList)
+        })
+      }
+      else {
+        promise = promise.then(list => {
+          return new Promise((resolve, reject) => {
+            let ava = wx.createImage()
+            ava.src = friendData[i].avatarUrl
+            avatarList.push(ava)
+            ava.onload = () => resolve(list)
+          })
+        })
+      }
     }
     return promise
   }).then((list) => {
     let box = list[0], photo = list[1], avatarList = list.splice(2)
     for (let i = 0; i < 6; i++) {
+      if(i >= avatarList.length) break
       ctx.drawImage(
         box,
         screenWidth / 2 - box.width / 2,
@@ -107,13 +122,13 @@ function drawRankList(data) {
         box.width, box.height
       )
       ctx.drawImage(
-        photo,
+        avatarList[i],
         screenWidth / 2 - photo.width / 2 - box.width / 4,
         screenHeight / 4 + box.height * i + 10 * i + 16,
         photo.width, photo.height
       )
       ctx.drawImage(
-        avatarList[i],
+        photo,
         screenWidth / 2 - photo.width / 2 - box.width / 4,
         screenHeight / 4 + box.height * i + 10 * i + 16,
         photo.width, photo.height
@@ -126,22 +141,19 @@ function drawRankList(data) {
         screenWidth / 2 - photo.width / 4 - 3 * box.width / 8,
         screenHeight / 4 + box.height * i + 10 * i + 20 + box.height / 2
       )
+      ctx.fillStyle = "black"
+      ctx.fillText(
+        friendData[i].nickname,
+        screenWidth / 2 + photo.width / 2 - box.width / 4 + 10,
+        screenHeight / 4 + box.height * i + 10 * i + 20 + box.height / 2,
+        80
+      )
+      ctx.fillText(
+        friendData[i].KVDataList[0].value.toString(),
+        screenWidth / 2 + photo.width / 2 - box.width / 4 + 90,
+        screenHeight / 4 + box.height * i + 10 * i + 20 + box.height / 2
+      )
     }
   })
-  
-
-  // let long = wx.createImage()
-  // long.src = 'images/rank/long.png'
-  // long.onload = () => {
-  //   ctx.drawImage(
-  //     long,
-  //     screenWidth / 2 - long.width / 2,
-  //     screenHeight / 4 + 15 - box.height,
-  //     long.width, long.height
-  //   )
-  // }
-  // let select = wx.createImage()
-  // select.src = 'images/rank/select.png'
-
 }
 
