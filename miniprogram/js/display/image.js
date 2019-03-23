@@ -4,12 +4,24 @@ const ID = 'cloud://classification-test-d20ada.636c-classification-test-d20ada/'
 
 export default class ImageManager {
   constructor() {
+    this.bg = new Image()
+    this.imageGet(this.bg, ID + 'bg.png', 'bg.png')
     this.tip = new Image()
-    this.imageGet(this.tip, ID + 'tip.png', 'tip.png')
+    this.imageGet(this.tip, ID + 'Tip.png', 'abc.png')
     this.stars = new Image()
     this.imageGet(this.stars, ID + 'stars.png', 'stars.png')
-    this.tipText = new Image()
-    this.imageGet(this.tipText, ID + 'tipText.png', 'tipText.png')
+    
+    this.heart = new Image()
+    this.imageGet(this.heart, ID + 'heart.png', 'heart.png')
+    this.pop = new Image()
+    this.imageGet(this.pop, ID + 'pop.png', 'pop.png')
+
+    this.cloudleft = new Image()
+    this.imageGet(this.cloudleft, ID + 'cloudleft.png', 'cloudleft.png')
+    this.cloudcenter = new Image()
+    this.imageGet(this.cloudcenter, ID + 'cloudcenter.png', 'cloudcenter.png')
+    this.cloudright = new Image()
+    this.imageGet(this.cloudright, ID + 'cloudright.png', 'cloudright.png')
 
     this.normal_cans = new Array(4)
     this.getImageList(this.normal_cans, 'gabbages/normal/cans/', '.png', ID)

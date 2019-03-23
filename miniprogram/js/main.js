@@ -7,6 +7,9 @@ import DataBus from './databus'
 import Ashcan from './player/ashcan'
 import HOME from './home/home'
 import Button from './display/button.js'
+const openDataContext = wx.getOpenDataContext()
+const sharedCanvas = openDataContext.canvas
+
 let ctx = canvas.getContext('2d')
 let databus = new DataBus()
 let background = databus.images.home_page
@@ -22,6 +25,15 @@ logo.src = 'images/intro/logo.png'
 let earth = new Image()
 earth.src = 'images/intro/earth.png'
 let introBtn = new Button(null, 'images/intro/start.png')
+
+let normalTip = new Image()
+normalTip.src = 'images/tip/normal.png'
+let diffTip = new Image()
+diffTip.src = 'images/tip/diff.png'
+let normalTipText = new Image()
+normalTipText.src = 'images/tip/normalText.png'
+let diffTipText = new Image()
+diffTipText.src = 'images/tip/diffText.png'
 
 let introText = new Image()
 introText.src = 'images/intro/introduction.png'
@@ -58,6 +70,13 @@ export default class Main {
     databus.mode = 0
     // display the introduction page
     this.pause(this.introTouch, this.intro_render)
+    console.log(`main:${screenWidth}:${screenHeight}`)
+    openDataContext.postMessage({
+      option: 'initialize',
+      size: [screenWidth, screenHeight]
+    })
+    this.music = new Music()
+    this.music.playBgm()
     introBtn.beginAnimation(true, zoom, 0, 0)
     this.login()
   }
@@ -130,6 +149,7 @@ export default class Main {
     this.player = new Ashcan(ctx, databus.mode)
     this.gameinfo = new GameInfo(databus.mode)
     this.music = new Music()
+    this.music.gameBgm()
 
     databus.cans = this.player
 
@@ -169,6 +189,7 @@ export default class Main {
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
     let classification = this.player.whichIsTouched(x, y)
+    if (classification != 0) this.music.playTouch()
 
     let that = this
 
@@ -199,7 +220,8 @@ export default class Main {
         x <= area.endX &&
         y >= area.startY &&
         y <= area.endY) {
-        this.restart()
+        this.music.playBgm()
+        this.home()
       }
     }
 
@@ -218,7 +240,7 @@ export default class Main {
     databus.enemys.forEach((item) => {
         item.drawToCanvas(ctx)
       })
-    // draw the four ashcans onto the canvas
+    // draw the ashcans onto the canvas
     this.player.drawToCanvas(ctx)
     // play the animations in the queue
     databus.animations.forEach((ani) => {
@@ -239,11 +261,11 @@ export default class Main {
         this.personalHighScore
       )
 
-      if (!this.hasEventBind) {
-        this.hasEventBind = true
-        this.touchHandler = this.touchEventHandler.bind(this)
-        canvas.addEventListener('touchstart', this.touchHandler)
-      }
+      // if (!this.hasEventBind) {
+      //   this.hasEventBind = true
+      //   this.touchHandler = this.touchEventHandler.bind(this)
+      //   canvas.addEventListener('touchstart', this.touchHandler)
+      // }
     }
   }
 
@@ -264,6 +286,12 @@ export default class Main {
             databus.gameOver = true
 
             let refresh = databus.score > that.personalHighScore
+            if(refresh) {
+              that.personalHighScore = databus.score
+              openDataContext.postMessage({
+                option: 'update',
+              })
+            }
             let end = new Date()
             that.gameinfo.gameData.score = databus.score
             that.gameinfo.gameData.endTime = end.toUTCString()
@@ -281,9 +309,12 @@ export default class Main {
               }
             })
             wx.setUserCloudStorage({
-              KVDataList: {
-                "score": tmp.score
-              },
+              KVDataList: [
+                {
+                  key: "score",
+                  value: that.personalHighScore.toString()
+                }
+              ],
               success: res => console.log(res),
               fail: err => console.log(err)
             })
@@ -304,11 +335,6 @@ export default class Main {
     }
     
     this.enemyGenerate()
-
-    // if (databus.frame % 20 === 0) {
-    //   // this.player.shoot()
-    //   this.music.playShoot()
-    // }
   }
 
   // 实现游戏帧循环
@@ -330,13 +356,6 @@ export default class Main {
   intro_render() {
     ctx.clearRect(0, 0, screenWidth, screenHeight)
 
-    // ctx.drawImage(
-    //   testImg,
-    //   0, 0,
-    //   testImg.width, testImg.height,
-    //   0, 0,
-    //   screenWidth, screenHeight
-    // )
     ctx.drawImage(intro_bottom, 
     0, 0, 
     intro_bottom.width, intro_bottom.height, 
@@ -398,13 +417,14 @@ export default class Main {
       x <= area.endX &&
       y >= area.startY &&
       y <= area.endY) {
-        this.bg.modeBtn.onClick(() => {
-          if(!this.bg.modePoped) {
-            // do not change the sequence
-            this.bg.showMode(this)
-            this.bg.modePoped = true
-          }
-        }, zoom)
+      this.music.playTouch()
+      this.bg.modeBtn.onClick(() => {
+        if(!this.bg.modePoped) {
+          // do not change the sequence
+          this.bg.showMode(this)
+          this.bg.modePoped = true
+        }
+      }, zoom)
       return;
     }
 
@@ -414,9 +434,10 @@ export default class Main {
       x <= area.endX &&
       y >= area.startY &&
       y <= area.endY) {
-        this.bg.infoBtn.onClick(() => {
-          console.log('rank!')
-        }, zoom)
+      this.music.playTouch()
+      this.bg.infoBtn.onClick(() => {
+        this.pause(this.rankTouch, this.rankRender)
+      }, zoom)
       return;
     }
 
@@ -426,84 +447,92 @@ export default class Main {
       x <= area.endX &&
       y >= area.startY &&
       y <= area.endY) {
-        this.bg.settingBtn.onClick(() => {
-          if(!this.settingPoped){
-            this.bg.showSetting(this)
-            this.bg.settingPoped = true
-          }
-        }, zoom)
-      // this.pause(this.tipTouch, this.tip_render)
+      this.music.playTouch()
+      this.bg.settingBtn.onClick(() => {
+        if(!this.settingPoped){
+          this.bg.showSetting(this)
+          this.bg.settingPoped = true
+        }
+      }, zoom)
       return;
     }
 
-    let button = this.bg.normalModeBtn
-    area = {
-      startX: button.x,
-      startY: button.y,
-      endX: button.x + button.img.width,
-      endY: button.y + button.img.height
-    }
-    if (x >= area.startX &&
-      x <= area.endX &&
-      y >= area.startY &&
-      y <= area.endY) {
+    if(this.bg.modePoped) {
+      let button = this.bg.normalModeBtn
+      area = {
+        startX: button.x,
+        startY: button.y,
+        endX: button.x + button.img.width,
+        endY: button.y + button.img.height
+      }
+      if (x >= area.startX &&
+        x <= area.endX &&
+        y >= area.startY &&
+        y <= area.endY) {
+        this.music.playTouch()
         button.onClick(() => {
-          databus.gameMode = 0
+          databus.mode = 0
+          this.pause(this.tipTouch, this.tip_render)
+        }, zoom)
+        return;
+        }
+
+      button = this.bg.difficultModeBtn
+      area = {
+        startX: button.x,
+        startY: button.y,
+        endX: button.x + button.img.width,
+        endY: button.y + button.img.height
+      }
+      if (x >= area.startX &&
+        x <= area.endX &&
+        y >= area.startY &&
+        y <= area.endY) {
+        this.music.playTouch()
+        button.onClick(() => {
+          databus.mode = 1
           this.pause(this.tipTouch, this.tip_render)
         }, zoom)
         return;
       }
-
-    button = this.bg.difficultModeBtn
-    area = {
-      startX: button.x,
-      startY: button.y,
-      endX: button.x + button.img.width,
-      endY: button.y + button.img.height
-    }
-    if (x >= area.startX &&
-      x <= area.endX &&
-      y >= area.startY &&
-      y <= area.endY) {
-      button.onClick(() => {
-        databus.gameMode = 1
-        this.pause(this.tipTouch, this.tip_render)
-      }, zoom)
-      return;
     }
 
-    button = this.bg.bgmBtn
-    area = {
-      startX: button.x,
-      startY: button.y,
-      endX: button.x + button.img.width,
-      endY: button.y + button.img.height
-    }
-    if (x >= area.startX &&
-      x <= area.endX &&
-      y >= area.startY &&
-      y <= area.endY) {
-      button.onClick(() => {
-        console.log('bgm!')
-      }, zoom)
-      return;
-    }
+    if(this.bg.settingPoped) {
+      let button = this.bg.bgmBtn
+      area = {
+        startX: button.x,
+        startY: button.y,
+        endX: button.x + button.img.width,
+        endY: button.y + button.img.height
+      }
+      if (x >= area.startX &&
+        x <= area.endX &&
+        y >= area.startY &&
+        y <= area.endY) {
+        this.music.playTouch()
+        button.onClick(() => {
+          databus.music = !databus.music
+        }, zoom)
+        return;
+      }
 
-    button = this.bg.soundBtn
-    area = {
-      startX: button.x,
-      startY: button.y,
-      endX: button.x + button.img.width,
-      endY: button.y + button.img.height
-    }
-    if (x >= area.startX &&
-      x <= area.endX &&
-      y >= area.startY &&
-      y <= area.endY) {
-      button.onClick(() => {
-        console.log('sound!')
-      }, zoom)
-      return;
+      button = this.bg.soundBtn
+      area = {
+        startX: button.x,
+        startY: button.y,
+        endX: button.x + button.img.width,
+        endY: button.y + button.img.height
+      }
+      if (x >= area.startX &&
+        x <= area.endX &&
+        y >= area.startY &&
+        y <= area.endY) {
+        this.music.playTouch()
+        button.onClick(() => {
+          databus.sound = !databus.sound
+        }, zoom)
+        return;
+      }
     }
   }
 
@@ -522,6 +551,7 @@ export default class Main {
    */
   introTouch(e) {
     e.preventDefault()
+    this.music.playTouch()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
 
@@ -592,15 +622,29 @@ export default class Main {
       0, 0, screenWidth, screenHeight
     )
 
-    img = databus.images.tipText
+    if(databus.mode == 0) img = normalTip
+    else img = diffTip
+    let drawWidth = 2 * screenWidth / 3
+    let drawHeight = (2 * img.width / 3) * img.height / img.width
     ctx.drawImage(
       img,
       0, 0, img.width, img.height,
-      0, screenHeight/5,
-      screenWidth, 7*screenHeight/10
+      screenWidth / 2 - drawWidth / 2, screenHeight / 12 - drawHeight / 2,
+      drawWidth, drawHeight
     )
 
-    img = databus.images.stars
+    if (databus.mode == 0) img = normalTipText
+    else img = diffTipText
+    drawWidth = 5 * screenWidth / 6
+    drawHeight = (5 * img.width / 6) * img.height / img.width
+    ctx.drawImage(
+      img,
+      0, 0, img.width, img.height,
+      screenWidth / 2 - drawWidth / 2, screenHeight / 5,
+      drawWidth, drawHeight
+    )
+
+    img = databus.images.heart
     ctx.drawImage(
       img,
       0, 0, img.width, img.height,
@@ -616,7 +660,24 @@ export default class Main {
    */
   tipTouch(e) {
     e.preventDefault()
+    this.music.playTouch()
     this.restart()
+  }
+
+  rankTouch(e) {
+    e.preventDefault()
+    this.music.playTouch()
+    this.home()
+  }
+
+  rankRender() {
+    // sharedCanvas.width = screenWidth
+    // sharedCanvas.height = screenHeight
+    ctx.clearRect(0, 0, screenWidth, screenHeight)
+    ctx.drawImage(
+      sharedCanvas,
+      0, 0,
+      screenWidth, screenHeight)
   }
 
   /**

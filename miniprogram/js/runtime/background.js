@@ -40,24 +40,33 @@ export default class BackGround extends Sprite {
       this.img,
       0,
       0,
-      this.width,
-      this.height,
+      this.img.width,
+      this.img.height,
       0,
-      -screenHeight + this.top,
+      0,
       screenWidth,
       screenHeight
     )
 
+    let img = databus.images.cloudleft
     ctx.drawImage(
-      this.img,
-      0,
-      0,
-      this.width,
-      this.height,
-      0,
-      this.top,
-      screenWidth,
-      screenHeight
+      img,
+      0, 0, img.width, img.height,
+      0, screenHeight/10, img.width, img.height
+    )
+
+    img = databus.images.cloudright
+    ctx.drawImage(
+      img,
+      0, 0, img.width, img.height,
+      screenWidth - img.width, screenHeight / 10, img.width, img.height
+    )
+
+    img = databus.images.cloudcenter
+    ctx.drawImage(
+      img,
+      0, 0, img.width, img.height,
+      screenWidth / 2 - img.width / 2, screenHeight / 10, img.width, img.height
     )
   }
 }

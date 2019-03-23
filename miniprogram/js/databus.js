@@ -17,6 +17,9 @@ export default class DataBus {
     this.pool = new Pool()
     this.mode = 0
 
+    this.music = true
+    this.sound = true
+
     this.reset()
   }
 

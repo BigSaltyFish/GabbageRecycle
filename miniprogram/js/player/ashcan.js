@@ -30,8 +30,6 @@ export default class Ashcan {
       cans = DIFFICULT_CANS
       DARK_CAN = databus.images.dark_can_difficult
     }
-    console.log(DARK_CAN)
-    console.log(databus.images)
 
     for(let i = 0; i < this.canNumber; i++) {
       this.ashcans[i] = new Sprite(cans[i], PLAYER_WIDTH, PLAYER_HEIGHT,
@@ -47,7 +45,7 @@ export default class Ashcan {
     this.bullets = []
 
     // 初始化事件监听
-    this.initEvent()
+    // this.initEvent()
   }
 
   /**

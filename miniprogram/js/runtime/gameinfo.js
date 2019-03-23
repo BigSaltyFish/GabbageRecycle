@@ -1,10 +1,10 @@
+import DataBus from '../databus.js'
 const screenWidth  = window.innerWidth
 const screenHeight = window.innerHeight
 
-let atlas = new Image()
-atlas.src = 'images/Common.png'
-let image=new Image()
-image.src = 'images/garbages/life.jpg'
+let databus = new DataBus()
+let heart=new Image()
+heart.src = 'images/garbages/heart.png'
 
 
 export default class GameInfo {
@@ -29,47 +29,51 @@ export default class GameInfo {
 
   renderGameLife(ctx,lifeNumber){
     for(let i=0;i<lifeNumber;i++){
-      ctx.drawImage(image, 0, 0, 753, 1000, 2,30+30*i, 30, 30)
+      ctx.drawImage(
+        heart, 
+        0, 0, heart.width, heart.height, 
+        2,30+30*i, 30, 30)
     }
   }
 
   renderGameOver(ctx, score, personalHighScore) {
-    ctx.drawImage(atlas, 0, 0, 119, 108, screenWidth / 2 - 150, screenHeight / 2 - 100, 300, 300)
-
-    ctx.fillStyle = "#ffffff"
+    let img = databus.images.pop
+    ctx.drawImage(
+      img, 
+      0, 0, img.width, img.height,
+      screenWidth / 2 - img.width / 2, screenHeight / 2 - img.height / 2,
+      img.width, img.height
+    )
+    ctx.fillStyle = "#000000"
     ctx.font    = "20px Arial"
+    ctx.textAlign = "center"
 
     ctx.fillText(
-      '游戏结束',
-      screenWidth / 2 - 40,
-      screenHeight / 2 - 100 + 50
+      'Game Over!',
+      screenWidth / 2,
+      screenHeight / 2
     )
 
+    ctx.save()
+    ctx.font = "30px Helvetica bold"
     ctx.fillText(
-      '得分: ' + score,
-      screenWidth / 2 - 40,
-      screenHeight / 2 - 100 + 130
+      '' + score,
+      screenWidth / 2,
+      screenHeight / 2 + 50
     )
+    ctx.restore()
 
     if (personalHighScore) {
       ctx.fillText(
         '最高分: ' + personalHighScore,
-        screenWidth / 2 - 40,
-        screenHeight / 2 - 100 + 160
+        screenWidth / 2,
+        screenHeight / 2 - 100 + 180
       )
     }
     
-    ctx.drawImage(
-      atlas,
-      120, 6, 39, 24,
-      screenWidth / 2 - 60,
-      screenHeight / 2 - 100 + 180,
-      120, 40
-    )
-
     ctx.fillText(
       '重新开始',
-      screenWidth / 2 - 40,
+      screenWidth / 2,
       screenHeight / 2 - 100 + 205
     )
 

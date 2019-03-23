@@ -1,4 +1,7 @@
+import DataBus from '../databus.js'
+
 let instance
+let databus = new DataBus()
 
 /**
  * 统一的音效管理器
@@ -14,27 +17,36 @@ export default class Music {
     this.bgmAudio.loop = true
     this.bgmAudio.src  = 'audio/bgm.mp3'
 
-    this.shootAudio     = new Audio()
-    this.shootAudio.src = 'audio/bullet.mp3'
+    this.playAudio = new Audio()
+    this.playAudio.loop = true
+    this.playAudio.src = 'audio/play.mp3'
 
-    this.boomAudio     = new Audio()
-    this.boomAudio.src = 'audio/boom.mp3'
-
-    this.playBgm()
+    this.touch = new Audio()
+    this.touch.src = 'audio/touch.mp3'
   }
 
   playBgm() {
-    console.log('music')
-    this.bgmAudio.play()
+    if(databus.music) {
+      console.log('music')
+      this.playAudio.pause()
+      this.bgmAudio.play()
+    }
   }
 
-  playShoot() {
-    this.shootAudio.currentTime = 0
-    this.shootAudio.play()
+  gameBgm() {
+    if(databus.music) {
+      this.bgmAudio.pause()
+      this.playAudio.play()
+    }
   }
 
-  playExplosion() {
-    this.boomAudio.currentTime = 0
-    this.boomAudio.play()
+  playTouch() {
+    if(databus.sound) {
+      this.touch.play()
+    }
+  }
+
+  playStop() {
+    this.bgmAudio.pause()
   }
 }
