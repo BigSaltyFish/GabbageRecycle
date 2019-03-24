@@ -5,9 +5,9 @@ const ID = 'cloud://classification-test-d20ada.636c-classification-test-d20ada/'
 export default class ImageManager {
   constructor() {
     this.bg = new Image()
-    this.imageGet(this.bg, ID + 'bg.png', 'bg.png')
+    this.imageGet(this.bg, ID + 'bg1.png', 'bg1.png')
     this.tip = new Image()
-    this.imageGet(this.tip, ID + 'Tip.png', 'abc.png')
+    this.imageGet(this.tip, ID + 'Tip.png', 'Tip.png')
     this.stars = new Image()
     this.imageGet(this.stars, ID + 'stars.png', 'stars.png')
     

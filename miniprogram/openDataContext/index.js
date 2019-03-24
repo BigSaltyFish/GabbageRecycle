@@ -50,13 +50,28 @@ wx.onMessage(data => {
 function drawRankList(data) {
   new Promise((resolve, reject) => {
     let rankBg = wx.createImage()
-    rankBg.src = 'images/rank/background.png'
+    rankBg.src = 'images/start/bg.png'
     rankBg.onload = () => resolve(rankBg)
   }).then(rankBg => {
     ctx.drawImage(
       rankBg,
       0, 0,
       screenWidth, screenHeight
+    )
+  })
+
+  new Promise((resolve, reject) => {
+    let title = wx.createImage()
+    title.src = 'images/rank/title.png'
+    title.onload = () => resolve(title)
+  }).then(title => {
+    let drawWidth = 2 * screenWidth / 3
+    let drawHeight = (2 * screenWidth / 3) * title.height / title.width
+    ctx.drawImage(
+      title,
+      0, 0, title.width, title.height,
+      screenWidth / 2 - drawWidth / 2, screenHeight / 12 - drawHeight / 2,
+      drawWidth, drawHeight
     )
   })
   
@@ -71,7 +86,6 @@ function drawRankList(data) {
       screenHeight / 4 + 15 - throne.height,
       throne.width, throne.height
     )
-    console.log('reached!')
   })
 
   new Promise((resolve, reject) => {

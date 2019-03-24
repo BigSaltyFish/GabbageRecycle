@@ -28,6 +28,9 @@ let introBtn = new Button(null, 'images/intro/start.png')
 
 let normalTip = new Image()
 normalTip.src = 'images/tip/normal.png'
+let lifeheart = new Array(5)
+for (let i = 0; i < 5; i++) 
+  lifeheart[i] = new Button(null, 'images/garbages/heart.png')
 let diffTip = new Image()
 diffTip.src = 'images/tip/diff.png'
 let normalTipText = new Image()
@@ -479,6 +482,11 @@ export default class Main {
         this.music.playTouch()
         button.onClick(() => {
           databus.mode = 0
+          for(let i = 0; i < 2; i++) {
+            lifeheart[i].beginAnimation(false, (x) => {
+              return (-8*x*x + 160*x + 200) / 1000
+            }, 0, 0,11 * i)
+          }
           this.pause(this.tipTouch, this.tip_render)
         }, zoom)
         return;
@@ -498,6 +506,11 @@ export default class Main {
         this.music.playTouch()
         button.onClick(() => {
           databus.mode = 1
+          for (let i = 0; i < 5; i++) {
+            lifeheart[i].beginAnimation(false, (x) => {
+              return (-8 * x * x + 160 * x + 200) / 1000
+            }, 0, 0, 11 * i)
+          }
           this.pause(this.tipTouch, this.tip_render)
         }, zoom)
         return;
@@ -633,7 +646,8 @@ export default class Main {
     if(databus.mode == 0) img = normalTip
     else img = diffTip
     let drawWidth = 2 * screenWidth / 3
-    let drawHeight = (2 * img.width / 3) * img.height / img.width
+    let drawHeight = (2 * screenWidth / 3) * img.height / img.width
+    // console.log(`initial rate: ${img.width / img.height}, cast rate: ${drawWidth / drawHeight}`)
     ctx.drawImage(
       img,
       0, 0, img.width, img.height,
@@ -644,7 +658,7 @@ export default class Main {
     if (databus.mode == 0) img = normalTipText
     else img = diffTipText
     drawWidth = 5 * screenWidth / 6
-    drawHeight = (5 * img.width / 6) * img.height / img.width
+    drawHeight = (5 * screenWidth / 6) * img.height / img.width
     ctx.drawImage(
       img,
       0, 0, img.width, img.height,
@@ -652,14 +666,25 @@ export default class Main {
       drawWidth, drawHeight
     )
 
-    img = databus.images.heart
-    ctx.drawImage(
-      img,
-      0, 0, img.width, img.height,
-      screenWidth - img.width, screenHeight - img.height,
-      img.width, img.height
-    )
+    let count = 0;
+    if(databus.mode == 0) count = 2
+    else count = 5
+    for(let i = 0; i < count; i++) {
+      let button = lifeheart[i]
+      button.drawOn(
+        ctx, 
+        0, 0, button.img.width, button.img.height,
+        screenWidth - button.img.width * (i + 1), screenHeight - button.img.height,
+        button.img.width, button.img.height
+      )
+    }
 
+    //play the animations
+    databus.animations.forEach((ani) => {
+      if (ani.isPlaying) {
+        ani.aniZoom(ctx)
+      }
+    })
   }
 
   /**

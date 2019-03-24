@@ -52,21 +52,21 @@ export default class BackGround extends Sprite {
     ctx.drawImage(
       img,
       0, 0, img.width, img.height,
-      0, screenHeight/10, img.width, img.height
+      0, screenHeight/15, img.width, img.height
     )
 
     img = databus.images.cloudright
     ctx.drawImage(
       img,
       0, 0, img.width, img.height,
-      screenWidth - img.width, screenHeight / 10, img.width, img.height
+      screenWidth - img.width, screenHeight / 15, img.width, img.height
     )
 
     img = databus.images.cloudcenter
     ctx.drawImage(
       img,
       0, 0, img.width, img.height,
-      screenWidth / 2 - img.width / 2, screenHeight / 10, img.width, img.height
+      screenWidth / 2 - img.width / 2, screenHeight / 15, img.width, img.height
     )
   }
 }

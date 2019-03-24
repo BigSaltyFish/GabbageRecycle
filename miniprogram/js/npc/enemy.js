@@ -9,6 +9,10 @@ const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
 const PLAYER_WIDTH = 25 * 2
 const PLAYER_HEIGHT = 63 * 2
+let databus = new DataBus()
+const bornArea = [50 - ENEMY_WIDTH / 2, 
+  screenWidth / 2 - ENEMY_WIDTH / 2, 
+  screenWidth - 30 - ENEMY_WIDTH / 2]
 
 const normalGabbage = new Array(
   {
@@ -62,7 +66,7 @@ const __ = {
   move: Symbol('move')
 }
 
-let databus = new DataBus()
+
 
 function rnd(start, end) {
   return Math.floor(Math.random() * (end - start) + start)
@@ -105,8 +109,8 @@ export default class Enemy extends Animation {
     }
 
     this.color_bright = 0
-    this.x = rnd(0, window.innerWidth - ENEMY_WIDTH)
-    this.y = -this.height
+    this.x = bornArea[rnd(0, 3)]
+    this.y = screenHeight / 15 + 30
     this[__.speed] = speed
     this[__.move] = 0
     this.isLiving = 0
@@ -144,7 +148,7 @@ export default class Enemy extends Animation {
     this.x += this[__.move]
 
     // 对象回收
-    if (this.y > (window.innerHeight - PLAYER_HEIGHT / 2 - 30)) {
+    if (this.y > (window.innerHeight - PLAYER_HEIGHT / 2 - 10)) {
       if (this.isLiving == 0){
         this.isLiving = -1
       }

@@ -33,8 +33,8 @@ export default class Ashcan {
 
     for(let i = 0; i < this.canNumber; i++) {
       this.ashcans[i] = new Sprite(cans[i], PLAYER_WIDTH, PLAYER_HEIGHT,
-        (i + 1) * (screenWidth - 10) / (this.canNumber + 1) + 5 - PLAYER_WIDTH / 2, 
-        screenHeight - PLAYER_HEIGHT - 30)
+        (i + 1) * (screenWidth) / (this.canNumber + 1) - PLAYER_WIDTH / 2, 
+        screenHeight - PLAYER_HEIGHT - 10)
     }
 
     // 玩家默认处于屏幕底部居中位置

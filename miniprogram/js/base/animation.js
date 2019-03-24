@@ -76,12 +76,15 @@ export default class Animation extends Sprite {
    * @param {number} count: the frame number.
    * @param {function} handler: the touch event handler.
    */
-  initZoom(count, handler, handleFrame, move, zoom_x = 0, zoom_y = 0) {
+  initZoom(count, handler, handleFrame, move, zoom_x = 0, zoom_y = 0, delay = 0) {
     this.imgList.push(this.img)
     this.count = count
     this.handler = handler
     this.handleFrame = handleFrame
     this.zoom = move
+    this.delay = delay
+    if(delay != 0) this.delayed = false
+    else this.delayed = true
 
     this.zoom_x = zoom_x
     this.zoom_y = zoom_y
@@ -90,34 +93,39 @@ export default class Animation extends Sprite {
 
   // 将播放中的帧绘制到canvas上
   aniRender(ctx) {
-    ctx.drawImage(
-      this.imgList[this.index],
-      this.x,
-      this.y,
-      this.width  * 1.2,
-      this.height * 1.2
-    )
+    if(this.delayed) {
+      ctx.drawImage(
+        this.imgList[this.index],
+        this.x,
+        this.y,
+        this.width  * 1.2,
+        this.height * 1.2
+      )
+    }
   }
 
   /** 
    * this animation is specially made for the buttons
    * it can zoom it according the passing function and move it lineaily.
+   * the zoom function's index ranges from 0 to 10, and the value ranges from 0 to 1.
    * @param {Context} ctx: the drawing context.
    */
   aniZoom(ctx) {
-    let k = this.zoom(10*(this.index + 1)/this.count)
-    let img = this.imgList[0]
+    if(this.delayed) {
+      let k = this.zoom(10*(this.index + 1)/this.count)
+      let img = this.imgList[0]
 
-    this.x += this.zoom_x / this.count
-    this.y += this.zoom_y / this.count
+      this.x += this.zoom_x / this.count
+      this.y += this.zoom_y / this.count
 
-    ctx.drawImage(
-      img,
-      this.center_x - k * img.width/2,
-      this.center_y - k * img.height/2,
-      k * img.width,
-      k * img.height
-    )
+      ctx.drawImage(
+        img,
+        this.center_x - k * img.width/2,
+        this.center_y - k * img.height/2,
+        k * img.width,
+        k * img.height
+      )
+    }
   }
 
   // 播放预定的帧动画
@@ -151,8 +159,16 @@ export default class Animation extends Sprite {
   // 帧遍历
   frameLoop() {
     this.index++
-
-    if(this.index == this.handleFrame && this.handler != null) this.handler()
+    if(!this.delayed) {
+      if(this.index < this.delay) return;
+      else {
+        this.delayed = true
+        this.index = 0
+        return;
+      }
+    }
+    if(this.delayed && this.index == this.handleFrame &&
+     this.handler != null) this.handler()
 
     if ( this.index > this.count - 1 ) {
       if ( this.loop ) {

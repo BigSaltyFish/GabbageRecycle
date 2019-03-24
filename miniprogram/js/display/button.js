@@ -48,8 +48,8 @@ export default class Button extends Animation {
     this.playAnimation()
   }
 
-  beginAnimation(isLoop, move, zoom_x = 0, zoom_y = 0) {
-    this.initZoom(100, null, 0, move, zoom_x, zoom_y)
+  beginAnimation(isLoop, move, zoom_x = 0, zoom_y = 0, delay = 0) {
+    this.initZoom(100, null, 0, move, zoom_x, zoom_y, delay)
     this.playAnimation(0, isLoop)
   }
 }
