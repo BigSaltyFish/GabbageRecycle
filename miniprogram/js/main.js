@@ -43,6 +43,8 @@ introText.src = 'images/intro/introduction.png'
 
 // these are for the button in introduction
 let rad = 0
+// keep in record the last gabbage appeared
+let lastEnemy
 
 /**
    * calculating the zoom rate by the index.
@@ -56,9 +58,12 @@ const zoom = (index) => {
 let startbg = new Image()
 startbg.src = 'images/start/bg.png'
 
-wx.cloud.init()
+console.log(wx.cloud.init)
+wx.cloud.init({
+  env: 'class-release-8cfbab'
+})
 const db = wx.cloud.database({
-  env: 'classification-test-d20ada'
+  env: 'class-release-8cfbab'
 })
 
 /**
@@ -182,8 +187,9 @@ export default class Main {
   enemyGenerate() {
     if (databus.frame % 100 === 0) {
       let enemy = databus.pool.getItemByClass('enemy', Enemy)
+      let speed = 2 + databus.frame / 1000
       // enemy.init(6)
-      enemy.init(2, Math.floor(Math.random() * 4) + 1)
+      enemy.init(speed, Math.floor(Math.random() * 4) + 1)
       databus.enemys.push(enemy)
     }
   }
@@ -195,6 +201,10 @@ export default class Main {
   touchEventHandler(e) {
     e.preventDefault()
     const normalName = ['dry', 'recyclable', 'wet', 'harmful']
+    const difficultName = ['coarse', 'combustible', 'non-burnable', 'plastic-packaging', 'resource']
+    let names
+    if(databus.mode === 0) names = normalName
+    else names = difficultName
 
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
@@ -216,10 +226,12 @@ export default class Main {
         }
 
         let piece = {
-          choose: normalName[classification - 1],
-          answer: normalName[enemy.classification - 1]
+          choose: names[classification - 1],
+          answer: names[enemy.classification - 1]
         }
-        this.gameinfo.gameData.record.push(piece)
+        if(enemy !== lastEnemy)
+          this.gameinfo.gameData.record.push(piece)
+        lastEnemy = enemy
       }
       
     }
@@ -288,7 +300,8 @@ export default class Main {
     let that = this
 
     databus.enemys.forEach((item) => {
-        item.update()
+        let piece = item.update()
+      if (piece !== null) this.gameinfo.gameData.record.push(piece)
         if (item.isLiving == -1) {
 
           if(databus.life==1){
@@ -305,12 +318,12 @@ export default class Main {
             let end = new Date()
             that.gameinfo.gameData.score = databus.score
             that.gameinfo.gameData.endTime = end.toUTCString()
-            that.gameinfo.gameData.gameTime = end.getTime() - 
-              that.gameinfo.start.getTime()
+            that.gameinfo.gameData.gameTime = (end.getTime() - 
+              that.gameinfo.start.getTime()) / 1000
             let tmp = that.gameinfo.gameData
             let time = tmp.gameTime + that.gameTime
             wx.cloud.callFunction({
-              name: 'upload',
+              name: 'uploadScore',
               data: {
                 openid: window.openid,
                 breakRec: refresh,
@@ -383,8 +396,8 @@ export default class Main {
       earth.width, earth.height
     )
     //this is the center of the start button
-    introBtn.x = screenWidth / 2 + earth.width / 2 - introBtn.img.width/2
-    introBtn.y = 22 * screenHeight / 100 + earth.height - introBtn.img.height/2
+    introBtn.x = screenWidth / 2 - introBtn.img.width/2
+    introBtn.y = screenHeight - screenHeight / 11 - introBtn.img.height / 2
     rad = introBtn.img.width / 2
     introBtn.drawOn(
       ctx, 
@@ -398,7 +411,7 @@ export default class Main {
       introText,
       0, 0,
       introText.width, introText.height,
-      screenWidth / 20, introBtn.y + introBtn.img.height + 5,
+      screenWidth / 20, 22 * screenHeight / 100 + earth.height + 8,
       9 * screenWidth / 10, (9 * screenWidth / 10)*(introText.height/introText.width)
     )
 
@@ -657,8 +670,8 @@ export default class Main {
 
     if (databus.mode == 0) img = normalTipText
     else img = diffTipText
-    drawWidth = 5 * screenWidth / 6
-    drawHeight = (5 * screenWidth / 6) * img.height / img.width
+    drawWidth = 23 * screenWidth / 30
+    drawHeight = (drawWidth) * img.height / img.width
     ctx.drawImage(
       img,
       0, 0, img.width, img.height,

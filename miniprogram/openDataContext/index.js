@@ -70,7 +70,7 @@ function drawRankList(data) {
     ctx.drawImage(
       title,
       0, 0, title.width, title.height,
-      screenWidth / 2 - drawWidth / 2, screenHeight / 12 - drawHeight / 2,
+      screenWidth / 2 - drawWidth / 2, screenHeight / 8 - drawHeight / 2,
       drawWidth, drawHeight
     )
   })
@@ -156,8 +156,10 @@ function drawRankList(data) {
         screenHeight / 4 + box.height * i + 10 * i + 20 + box.height / 2
       )
       ctx.fillStyle = "black"
+      let txt = friendData[i].nickname.slice(0, 5)
+      if (friendData[i].nickname.length > 5) txt += '…'
       ctx.fillText(
-        friendData[i].nickname,
+        txt,
         screenWidth / 2 + photo.width / 2 - box.width / 4 + 10,
         screenHeight / 4 + box.height * i + 10 * i + 20 + box.height / 2,
         80

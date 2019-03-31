@@ -1,13 +1,13 @@
 const fs = wx.getFileSystemManager()
 // wx.cloud.init()
-const ID = 'cloud://classification-test-d20ada.636c-classification-test-d20ada/'
+const ID = 'cloud://class-release-8cfbab.636c-class-release-8cfbab/'
 
 export default class ImageManager {
   constructor() {
     this.bg = new Image()
-    this.imageGet(this.bg, ID + 'bg1.png', 'bg1.png')
+    this.imageGet(this.bg, ID + 'bg-1.png', 'bg-2.png')
     this.tip = new Image()
-    this.imageGet(this.tip, ID + 'Tip.png', 'Tip.png')
+    this.imageGet(this.tip, ID + 'tip.png', 'tip-1.png')
     this.stars = new Image()
     this.imageGet(this.stars, ID + 'stars.png', 'stars.png')
     
@@ -17,11 +17,11 @@ export default class ImageManager {
     this.imageGet(this.pop, ID + 'pop.png', 'pop.png')
 
     this.cloudleft = new Image()
-    this.imageGet(this.cloudleft, ID + 'cloudleft.png', 'cloudleft.png')
+    this.imageGet(this.cloudleft, ID + 'cloudleft-1.png', 'cloudleft-1.png')
     this.cloudcenter = new Image()
-    this.imageGet(this.cloudcenter, ID + 'cloudcenter.png', 'cloudcenter.png')
+    this.imageGet(this.cloudcenter, ID + 'cloudcenter-1.png', 'cloudcenter-1.png')
     this.cloudright = new Image()
-    this.imageGet(this.cloudright, ID + 'cloudright.png', 'cloudright.png')
+    this.imageGet(this.cloudright, ID + 'cloudright-1.png', 'cloudright-1.png')
 
     this.normal_cans = new Array(4)
     this.getImageList(this.normal_cans, 'gabbages/normal/cans/', '.png', ID)

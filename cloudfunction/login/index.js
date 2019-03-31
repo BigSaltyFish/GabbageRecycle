@@ -6,7 +6,7 @@ cloud.init()
 
 // 可在入口函数外缓存 db 对象
 const db = cloud.database({
-  env: 'classification-test-d20ada'
+  env: 'class-release-8cfbab'
 })
 
 // 数据库查询更新指令对象

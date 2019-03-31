@@ -147,16 +147,23 @@ export default class Enemy extends Animation {
 
     this.x += this[__.move]
 
+    let piece = null
+
     // 对象回收
     if (this.y > (window.innerHeight - PLAYER_HEIGHT / 2 - 10)) {
       if (this.isLiving == 0){
         this.isLiving = -1
       }
+
+      piece = {
+        timeout: gabbageSet[databus.mode][this.classification - 1].name
+      }
         
       databus.updateColor = 1
       databus.removeEnemey(this)
-    }
 
+    }
+    return piece
   }
   comeout(x, y, classifition) {
     this.isLiving = 1
