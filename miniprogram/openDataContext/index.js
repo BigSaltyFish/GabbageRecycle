@@ -21,6 +21,7 @@ wx.onMessage(data => {
       success: res => {
         console.log(res)
         friendData = res.data
+        drawRankList(res.data)
       },
       fail: err => console.log(err)
     })
@@ -48,6 +49,7 @@ wx.onMessage(data => {
  * to ensure the valid render. Show up to six users.
  */
 function drawRankList(data) {
+  ctx.clearRect(0, 0, screenWidth, screenHeight)
   new Promise((resolve, reject) => {
     let rankBg = wx.createImage()
     rankBg.src = 'images/start/bg.png'

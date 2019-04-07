@@ -154,11 +154,11 @@ export default class Enemy extends Animation {
       if (this.isLiving == 0){
         this.isLiving = -1
       }
-
-      piece = {
-        timeout: gabbageSet[databus.mode][this.classification - 1].name
-      }
-        
+      if(this.isLiving !== 1) 
+        piece = {
+          timeout: gabbageSet[databus.mode][this.classification - 1].name
+        }
+      
       databus.updateColor = 1
       databus.removeEnemey(this)
 

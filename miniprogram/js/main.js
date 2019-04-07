@@ -311,9 +311,6 @@ export default class Main {
             let refresh = databus.score > that.personalHighScore
             if(refresh) {
               that.personalHighScore = databus.score
-              openDataContext.postMessage({
-                option: 'update',
-              })
             }
             let end = new Date()
             that.gameinfo.gameData.score = databus.score
@@ -341,6 +338,11 @@ export default class Main {
               success: res => console.log(res),
               fail: err => console.log(err)
             })
+            if(refresh) {
+              openDataContext.postMessage({
+                option: 'update',
+              })
+            }
 
           }else{
             databus.life = databus.life - 1
