@@ -19,7 +19,6 @@ wx.onMessage(data => {
     wx.getFriendCloudStorage({
       keyList: ['score'],
       success: res => {
-        console.log(res)
         friendData = res.data
         drawRankList(res.data)
       },

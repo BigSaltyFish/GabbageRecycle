@@ -10,6 +10,8 @@ import Button from './display/button.js'
 const openDataContext = wx.getOpenDataContext()
 const sharedCanvas = openDataContext.canvas
 
+let counter = 0
+
 let ctx = canvas.getContext('2d')
 let databus = new DataBus()
 let background = databus.images.home_page
@@ -58,7 +60,6 @@ const zoom = (index) => {
 let startbg = new Image()
 startbg.src = 'images/start/bg.png'
 
-console.log(wx.cloud.init)
 wx.cloud.init({
   env: 'class-release-8cfbab'
 })
@@ -217,6 +218,7 @@ export default class Main {
       this.player.changeColor(0)
     } else {
       let enemy = databus.enemys[0]
+      // console.log(`a touch occured: ${classification} for enemy ${enemy.classification}`)
       if (enemy.isLiving != 1) {
         if (enemy.classification == classification) {
           enemy.comeout(enemy.x, enemy.y, enemy.classification)
@@ -225,12 +227,17 @@ export default class Main {
           else if (databus.mode == 1) databus.score += 30
         }
 
+        counter++
         let piece = {
           choose: names[classification - 1],
-          answer: names[enemy.classification - 1]
+          answer: names[enemy.classification - 1],
+          stamp: classification
         }
-        if(enemy !== lastEnemy)
+        if ((enemy !== lastEnemy || enemy.classification == classification) &&
+            classification !== 0) {
+          // console.log('added')
           this.gameinfo.gameData.record.push(piece)
+        }
         lastEnemy = enemy
       }
       
@@ -301,7 +308,10 @@ export default class Main {
 
     databus.enemys.forEach((item) => {
         let piece = item.update()
-      if (piece !== null) this.gameinfo.gameData.record.push(piece)
+      if (piece !== null) {
+        this.gameinfo.gameData.record.push(piece)
+        lastEnemy = null
+      }
         if (item.isLiving == -1) {
 
           if(databus.life==1){

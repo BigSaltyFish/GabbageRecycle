@@ -27,7 +27,6 @@ export default class Music {
 
   playBgm() {
     if(databus.music) {
-      console.log('music')
       this.playAudio.pause()
       this.bgmAudio.play()
     }

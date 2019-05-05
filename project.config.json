@@ -13,6 +13,8 @@
 	"projectname": "classification-master",
 	"miniprogramRoot": "miniprogram/",
 	"cloudfunctionRoot": "cloudfunction/",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
