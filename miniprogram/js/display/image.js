@@ -24,7 +24,7 @@ export default class ImageManager {
     this.imageGet(this.cloudright, ID + 'cloudright-1.png', 'cloudright-1.png')
 
     this.normal_cans = new Array(4)
-    this.getImageList(this.normal_cans, 'gabbages/normal/cans/', '.png', ID)
+    this.getImageList(this.normal_cans, 'gabbages/normal/cans/', '-1.png', ID)
     this.dark_can_normal = new Image()
     this.imageGet(this.dark_can_normal, 'cloud://classification-test-d20ada.636c-classification-test-d20ada/gabbages/normal/cans/dark.png', 'gabbages/normal/cans/dark.png')
 
@@ -145,7 +145,8 @@ export default class ImageManager {
     this.fill(list)
     for(let i = 1; i < list.length + 1; i++) {
       let path = dir + i + format
-      this.imageGet(list[i - 1], id + path, path)
+      let real = dir + i + '.' + format.split('.')[1]
+      this.imageGet(list[i - 1], id + real, path)
     }
   }
 

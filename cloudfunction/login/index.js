@@ -2,7 +2,9 @@
 const cloud = require('wx-server-sdk')
 
 // 与小程序端一致，均需调用 init 方法初始化
-cloud.init()
+cloud.init({
+  env: 'class-release-8cfbab'
+})
 
 // 可在入口函数外缓存 db 对象
 const db = cloud.database({
@@ -44,12 +46,21 @@ exports.main = async (event, context) => {
         gameTime: 0
       }
     })
-    await db.createCollection(`${event.userInfo.openId}-record`)
-    await db.collection(event.userInfo.openId + '-record').add({
-      data: {
-        _openid: event.userInfo.openId
-      }
+
+    let piece = {}
+    piece["user_id"] = event.userInfo.openId
+    piece["record"] = []
+
+    await db.collection('user_data').add({
+      data: piece
     })
+
+    // await db.createCollection(`${event.userInfo.openId}-record`)
+    // await db.collection(event.userInfo.openId + '-record').add({
+    //   data: {
+    //     _openid: event.userInfo.openId
+    //   }
+    // })
     return {
       openid: event.userInfo.openId, 
       score: 0,

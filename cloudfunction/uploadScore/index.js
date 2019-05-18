@@ -30,9 +30,18 @@ exports.main = async (event, context) => {
     }
   })
 
-  await db.collection(`${event.openid}-record`).add({
-    data: event.record
+  let piece = {}
+  piece["record"] = _.push(event.record)
+
+  await db.collection('user_data').where({
+    user_id: event.openid
+  }).update({
+    data: piece
   })
+
+  // await db.collection(`${event.openid}-record`).add({
+  //   data: event.record
+  // })
 
   return {
     event,

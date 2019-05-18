@@ -10,8 +10,6 @@ import Button from './display/button.js'
 const openDataContext = wx.getOpenDataContext()
 const sharedCanvas = openDataContext.canvas
 
-let counter = 0
-
 let ctx = canvas.getContext('2d')
 let databus = new DataBus()
 let background = databus.images.home_page
@@ -227,11 +225,9 @@ export default class Main {
           else if (databus.mode == 1) databus.score += 30
         }
 
-        counter++
         let piece = {
           choose: names[classification - 1],
           answer: names[enemy.classification - 1],
-          stamp: classification
         }
         if ((enemy !== lastEnemy || enemy.classification == classification) &&
             classification !== 0) {
@@ -423,7 +419,7 @@ export default class Main {
       introText,
       0, 0,
       introText.width, introText.height,
-      screenWidth / 20, 22 * screenHeight / 100 + earth.height + 8,
+      screenWidth / 20, 22 * screenHeight / 100 + earth.height + 13,
       9 * screenWidth / 10, (9 * screenWidth / 10)*(introText.height/introText.width)
     )
 
