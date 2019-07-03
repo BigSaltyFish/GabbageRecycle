@@ -50,7 +50,7 @@ export default class BackGround extends Sprite {
   showMode(main) {
     const zoom = (x) => {return x*x/100}
     this.normalModeBtn = new Button(null, 'images/start/normal.png', screenWidth/2, screenHeight/3)
-    this.difficultModeBtn = new Button(null, 'images/start/difficult.png', screenWidth/2, screenHeight/3)
+    this.difficultModeBtn = new Button(null, 'images/start/difficult-1.png', screenWidth/2, screenHeight/3)
 
     this.normalModeBtn.onClick(null, zoom, -screenWidth / 4, -screenHeight/6)
     this.difficultModeBtn.onClick(null, zoom, screenWidth / 4, -screenHeight / 6)

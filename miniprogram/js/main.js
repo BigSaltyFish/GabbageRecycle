@@ -224,6 +224,9 @@ export default class Main {
           if (databus.mode == 0) databus.score += 20
           else if (databus.mode == 1) databus.score += 30
         }
+        else {
+          wx.vibrateShort()
+        }
 
         let piece = {
           choose: names[classification - 1],
